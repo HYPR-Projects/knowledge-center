@@ -1559,7 +1559,7 @@ var _quickLinks = []; // Populated from DB
 async function loadLinksFromDB() {
   try {
     const base = SB_URL + '/rest/v1/hub_links?is_active=eq.true&order=sort_order.asc,title.asc&select=';
-    const cols = 'category,title,icon,description,url,teams,product,sort_order,is_quick_access,created_at';
+    const cols = 'id,category,title,icon,description,url,teams,product,sort_order,is_quick_access,created_at';
     const hdrs = { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON };
 
     // Try with both keywords and qa_order, then fallback progressively
@@ -1580,6 +1580,7 @@ async function loadLinksFromDB() {
         const desc = r.description || '';
         const url = r.url || '';
         cat.links.push({
+          id: r.id,
           title: r.title || '',
           icon: r.icon || '🔗',
           desc,
@@ -1592,7 +1593,7 @@ async function loadLinksFromDB() {
         });
       }
       if (r.is_quick_access) {
-        _quickLinks.push({ title: r.title || '', icon: r.icon || '🔗', url: r.url || '', qa_order: r.qa_order ?? 999 });
+        _quickLinks.push({ id: r.id, title: r.title || '', icon: r.icon || '🔗', url: r.url || '', qa_order: r.qa_order ?? 999 });
       }
     });
     _quickLinks.sort((a, b) => a.qa_order - b.qa_order);
@@ -2078,8 +2079,10 @@ function injectCount(card) {
 
 // ─── CLICK TRACKING ─────────────────────────────────────────────────────
 
-function trackClick(url, title) {
-  const body = JSON.stringify({ link_url: url, link_title: title, user_email: window._userEmail || null });
+function trackClick(url, title, linkId) {
+  const payload = { link_url: url, link_title: title, user_email: window._userEmail || null };
+  if (linkId != null && linkId !== '') payload.link_id = Number(linkId);
+  const body = JSON.stringify(payload);
   fetch(SB_URL + '/rest/v1/link_clicks', {
     method: 'POST',
     headers: {
@@ -2103,7 +2106,8 @@ function initClickTracking() {
     const url = card.getAttribute('href');
     const titleEl = card.querySelector('.card-title') || card.querySelector('span');
     const title = titleEl ? titleEl.textContent.trim() : '';
-    if (url && title) trackClick(url, title);
+    const linkId = card.getAttribute('data-link-id');
+    if (url && title) trackClick(url, title, linkId);
   });
 }
 
@@ -2134,13 +2138,13 @@ async function renderTrending() {
       return;
     }
 
-    // Encontrar o ícone do link no CATS data
-    function findLinkIcon(url) {
+    // Encontrar o link no CATS data (usado para ícone e id atual)
+    function findLinkByUrl(url) {
       for (const cat of CATS) {
         const link = cat.links.find(l => l.url === url);
-        if (link) return link.icon;
+        if (link) return link;
       }
-      return '🔗';
+      return null;
     }
 
     // Merge trending counts into _clickCounts (authoritative source for trending period)
@@ -2150,13 +2154,16 @@ async function renderTrending() {
       _clickCounts[k] = Math.max(_clickCounts[k] || 0, item.click_count);
     });
 
-    grid.innerHTML = data.map((item, i) =>
-      `<a class="trending-card" href="${esc(item.link_url)}" target="_blank" rel="noopener">
-        <div class="ticon">${esc(findLinkIcon(item.link_url))}</div>
+    grid.innerHTML = data.map((item, i) => {
+      const link = findLinkByUrl(item.link_url);
+      const icon = link ? link.icon : '🔗';
+      const idAttr = link ? ` data-link-id="${link.id}"` : '';
+      return `<a class="trending-card" href="${esc(item.link_url)}" target="_blank" rel="noopener"${idAttr}>
+        <div class="ticon">${esc(icon)}</div>
         <span>${esc(item.link_title)}</span>
         <div class="trank">#${i + 1}</div>
-      </a>`
-    ).join('');
+      </a>`;
+    }).join('');
     section.classList.remove('no-data');
     applyClickCounts();
   } catch (err) {
@@ -2167,12 +2174,13 @@ async function renderTrending() {
 
 function renderQuick() {
   const items = _quickLinks.length > 0 ? _quickLinks : QUICK;
-  document.getElementById('quick-grid').innerHTML = items.map(q =>
-    `<a class="quick-card" href="${esc(q.url)}" target="_blank" rel="noopener">
+  document.getElementById('quick-grid').innerHTML = items.map(q => {
+    const idAttr = q.id != null ? ` data-link-id="${q.id}"` : '';
+    return `<a class="quick-card" href="${esc(q.url)}" target="_blank" rel="noopener"${idAttr}>
       <div class="qicon">${esc(q.icon)}</div>
       <span>${esc(q.title)}</span>
-    </a>`
-  ).join('');
+    </a>`;
+  }).join('');
 }
 
 function renderCatChips() {
@@ -2566,7 +2574,7 @@ function renderSections() {
         ${grp.links.map(l => {
           const typeId = l._typeId;
           const catCls = l._cat ? l._cat.cls : 'op';
-          return `<a class="link-card" href="${l.url}" target="_blank" rel="noopener" data-type="${typeId}">
+          return `<a class="link-card" href="${l.url}" target="_blank" rel="noopener" data-type="${typeId}" data-link-id="${l.id}">
             <div class="card-icon ${catCls}">${l.icon}</div>
             <div class="card-body">
               <div class="card-title" title="${esc(l.title)}">${hl(l.title, q)}${l.isNew ? '<span class="new-badge">Novo</span>' : ''}</div>

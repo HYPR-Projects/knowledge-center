@@ -22,6 +22,7 @@
   --bord-h:     rgba(255,255,255,0.16);
   --accent:     #11a1cb;
   --accent2:    #3bbfe0;
+  --fav:        #f5b43c;
   --text:       #e8ecf4;
   --text-2:     rgba(232,236,244,0.7);
   --muted:      rgba(232,236,244,0.62);
@@ -59,6 +60,7 @@
   --bord-h:     rgba(0,0,0,0.18);
   --accent:     #0d8aab;
   --accent2:    #0a7a99;
+  --fav:        #a86a00;
   --text:       #1b262f;
   --text-2:     rgba(27,38,47,0.72);
   --muted:      rgba(27,38,47,0.66);
@@ -115,7 +117,7 @@ img { display: block; max-width: 100%; }
   outline-offset: 2px;
   border-radius: var(--r-sm);
 }
-.link-card:focus-visible, .quick-card:focus-visible, .trending-card:focus-visible {
+.link-card .card-hit:focus-visible, .quick-card:focus-visible, .trending-card:focus-visible {
   outline-offset: -2px;
   border-radius: var(--r);
 }
@@ -461,6 +463,8 @@ img { display: block; max-width: 100%; }
   animation: fadeUp .4s ease .08s both;
 }
 /* Remove individual section bottom margin — zone padding handles it */
+.shortcuts-zone .fav-section { margin-bottom: var(--sp-5); }
+.shortcuts-zone .fav-section.no-data { margin-bottom: 0; }
 .shortcuts-zone .quick-section { margin-bottom: var(--sp-5); }
 .shortcuts-zone .trending-section { margin-bottom: var(--sp-4); }
 .shortcuts-zone .trending-section.no-data { margin-bottom: 0; }
@@ -578,6 +582,102 @@ img { display: block; max-width: 100%; }
 .trending-empty {
   font-size: 13px; color: var(--muted); font-style: italic;
   padding: var(--sp-4) 0;
+}
+
+/* ─── FAVORITES SECTION ──────────────── */
+.fav-section {
+  margin-bottom: var(--sp-10);
+  animation: fadeUp .45s ease .09s both;
+  transition: margin-bottom .35s cubic-bezier(.4, 0, .2, 1);
+}
+.fav-section.no-data { display: none; }
+.fav-section.search-hidden {
+  max-height: 0; margin-bottom: 0; overflow: hidden;
+  opacity: 0; pointer-events: none;
+  transition: max-height .3s ease, opacity .2s ease, margin-bottom .3s ease;
+}
+.fav-section:not(.search-hidden) {
+  max-height: 600px;
+  transition: max-height .4s ease, opacity .3s ease .05s, margin-bottom .3s ease;
+}
+.fav-star-lead { color: var(--fav); font-size: 12px; }
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-3);
+}
+.fav-card-wrap { position: relative; min-width: 0; animation: favIn .32s cubic-bezier(.2,.8,.3,1) both; }
+.fav-card {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 14px 40px 14px 16px;
+  background: rgba(245,180,60,.09);
+  border: 1px solid rgba(245,180,60,.22);
+  border-radius: var(--r);
+  font-size: 14px; font-weight: 500;
+  transition: all .18s ease; cursor: pointer;
+  min-width: 0;
+}
+.fav-card:hover {
+  background: rgba(245,180,60,.16);
+  border-color: rgba(245,180,60,.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245,180,60,.15);
+}
+.fav-card .qicon {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(245,180,60,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.fav-card span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-width: 0;
+}
+.fav-card-wrap .fav-btn {
+  position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+  opacity: 1;
+}
+@keyframes favIn {
+  from { opacity: 0; transform: translateY(8px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── FAVORITE STAR BUTTON (on catalog cards) ─── */
+.fav-btn {
+  position: relative; z-index: 2;
+  flex-shrink: 0; width: 26px; height: 26px; padding: 0; margin-top: -1px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: transparent; cursor: pointer; border-radius: 8px;
+  color: var(--muted); opacity: 0;
+  transition: opacity .18s ease, color .18s ease, background .18s ease, transform .15s ease;
+}
+.fav-btn svg { width: 18px; height: 18px; transition: transform .15s ease; }
+.fav-btn:not(.is-fav) svg { fill: none; }
+.fav-btn.is-fav { color: var(--fav); opacity: 1; }
+.fav-btn.is-fav svg { fill: var(--fav); stroke: var(--fav); }
+.fav-btn:hover { background: rgba(245,180,60,.16); color: var(--fav); }
+.link-card:hover .fav-btn,
+.link-card:focus-within .fav-btn,
+.fav-btn:focus-visible { opacity: 1; }
+.fav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fav-btn.just-toggled svg { animation: starPop .4s cubic-bezier(.2,.8,.3,1.5); }
+@keyframes starPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.4) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+/* Touch devices: no hover, so always show the star + enlarge tap target to ~44px (WCAG 2.5.5) */
+@media (hover: none) {
+  .fav-btn { opacity: 1; }
+  .link-card .fav-btn::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 44px; height: 44px; transform: translate(-50%, -50%);
+  }
+}
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .fav-card-wrap, .fav-btn.just-toggled svg { animation: none; }
+  .fav-card:hover { transform: none; }
 }
 
 /* ════════════════════════════════════════
@@ -1114,7 +1214,13 @@ img { display: block; max-width: 100%; }
 .link-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
-  opacity: 0; transition: opacity .2s;
+  opacity: 0; transition: opacity .2s; z-index: 2;
+}
+/* Stretched link: âncora cobre o card inteiro; controles ficam acima via z-index.
+   Evita interativo aninhado (<button> dentro de <a>). */
+.card-hit {
+  position: absolute; inset: 0; z-index: 1;
+  border-radius: inherit;
 }
 .link-card:hover {
   background: rgba(255,255,255,0.06);
@@ -1123,7 +1229,7 @@ img { display: block; max-width: 100%; }
   box-shadow: 0 10px 30px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.05);
 }
 .link-card:hover::before,
-.link-card:focus-visible::before { opacity: 1; }
+.link-card:focus-within::before { opacity: 1; }
 .card-icon {
   width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -1205,7 +1311,7 @@ img { display: block; max-width: 100%; }
   color: var(--muted); opacity: .25; transition: opacity .18s, transform .18s;
 }
 .link-card:hover .card-arrow,
-.link-card:focus-visible .card-arrow { opacity: 1; transform: translate(2px,-2px); }
+.link-card:focus-within .card-arrow { opacity: 1; transform: translate(2px,-2px); }
 
 /* ─── EMPTY STATE ────────────────────── */
 .empty-state { text-align: center; padding: 60px 20px; display: none; }
@@ -1266,6 +1372,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
 @media (max-width: 900px) {
   .quick-grid { grid-template-columns: repeat(3, 1fr); }
   .trending-grid { grid-template-columns: repeat(3, 1fr); }
+  .fav-grid { grid-template-columns: repeat(3, 1fr); }
   .links-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 }
 
@@ -1292,6 +1399,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
   .shortcuts-zone { padding: var(--sp-4) var(--sp-4) var(--sp-1); border-radius: var(--r); margin-bottom: var(--sp-5); }
   .quick-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
   .trending-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); }
+  .fav-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); }
 
   /* Filter bar mobile — hidden, replaced by mobile filter sheet */
   .filter-bar { display: none !important; }
@@ -1326,6 +1434,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
 @media (max-width: 400px) {
   .quick-grid { grid-template-columns: repeat(2, 1fr); }
   .trending-grid { grid-template-columns: repeat(2, 1fr); }
+  .fav-grid { grid-template-columns: repeat(2, 1fr); }
   .links-grid { grid-template-columns: 1fr; }
 }
 </style>
@@ -1471,6 +1580,18 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
       <h1 class="sr-only">HYPR Knowledge Hub</h1>
       <!-- Shortcuts zone: elevated surface -->
       <div class="shortcuts-zone">
+      <section class="fav-section no-data" id="fav-section">
+        <button type="button" class="section-label" onclick="toggleSection('fav')" aria-expanded="true" aria-controls="collapse-fav">
+          <span><span class="fav-star-lead" aria-hidden="true">★</span> Favoritos</span>
+          <span class="section-toggle" id="toggle-fav" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+        <div class="section-collapse" id="collapse-fav">
+          <div>
+            <div class="fav-grid" id="fav-grid"></div>
+          </div>
+        </div>
+      </section>
+
       <section class="quick-section" id="quick-section">
         <button type="button" class="section-label" onclick="toggleSection('quick')" aria-expanded="true" aria-controls="collapse-quick">
           <span>Acesso rápido</span>
@@ -1979,7 +2100,7 @@ function toggleSection(key) {
 }
 
 function restoreCollapsedSections() {
-  ['quick', 'trending'].forEach(key => {
+  ['fav', 'quick', 'trending'].forEach(key => {
     if (localStorage.getItem('hypr-hub-' + key + '-collapsed') === '1') {
       const collapse = document.getElementById('collapse-' + key);
       const toggle = document.getElementById('toggle-' + key);
@@ -2042,7 +2163,9 @@ async function renderHub() {
     Array(6).fill('<div class="skeleton-card"></div>').join('') + '</div></section>';
 
   await loadLinksFromDB();
+  loadFavoritesLocal();
   renderQuick();
+  renderFavorites();
   restoreCollapsedSections();
   renderTrending();
   renderViewSwitcher();
@@ -2054,6 +2177,7 @@ async function renderHub() {
   initSearch();
   initClickTracking();
   loadClickCounts();
+  syncFavoritesFromDB();
 }
 
 // ─── CLICK COUNTS (all-time por card) ───────────────────────────────────
@@ -2087,23 +2211,23 @@ async function loadClickCounts() {
 
 function applyClickCounts() {
   if (!_clickCounts) return;
-  // Link cards
-  document.querySelectorAll('.link-card[href]').forEach(card => {
-    injectCount(card);
-  });
-  // Trending cards
-  document.querySelectorAll('.trending-card[href]').forEach(card => {
-    injectCount(card);
-  });
-  // Quick cards
-  document.querySelectorAll('.quick-card[href]').forEach(card => {
+  // Link cards (div com <a.card-hit>), trending e quick (âncoras)
+  document.querySelectorAll('.link-card, .trending-card[href], .quick-card[href]').forEach(card => {
     injectCount(card);
   });
 }
 
+// href do card: na âncora direta (quick/trending) ou no .card-hit interno (link-card)
+function cardHref(card) {
+  const el = card.matches('[href]') ? card : card.querySelector('.card-hit');
+  return el ? el.getAttribute('href') : null;
+}
+
 function injectCount(card) {
   if (!_clickCounts) return;
-  const url = card.getAttribute('href').replace(/\/+$/, '');
+  const href = cardHref(card);
+  if (!href) return;
+  const url = href.replace(/\/+$/, '');
   const count = _clickCounts[url];
   if (!count) return;
   if (card.querySelector('.card-clicks')) return;
@@ -2138,9 +2262,17 @@ function initClickTracking() {
   if (!main || main._tracked) return;
   main._tracked = true;
   main.addEventListener('click', e => {
-    const card = e.target.closest('.link-card, .quick-card, .trending-card');
+    // Estrela de favoritar: intercepta antes de navegar/trackear
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavorite(favBtn.dataset.favId, favBtn);
+      return;
+    }
+    const card = e.target.closest('.link-card, .quick-card, .trending-card, .fav-card');
     if (!card) return;
-    const url = card.getAttribute('href');
+    const url = cardHref(card);
     const titleEl = card.querySelector('.card-title') || card.querySelector('span');
     const title = titleEl ? titleEl.textContent.trim() : '';
     const linkId = card.getAttribute('data-link-id');
@@ -2218,6 +2350,164 @@ function renderQuick() {
       <span>${esc(q.title)}</span>
     </a>`;
   }).join('');
+}
+
+// ─── FAVORITOS (curadoria por usuário: localStorage + Supabase) ──────────
+// _favorites: array de link_id (number), ordenado do mais recente pro mais antigo.
+var _favorites = [];
+const FAV_KEY = 'hypr-hub-favs';
+const FAV_STAR_SVG = '<svg viewBox="0 0 20 20" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10 1.7l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.88l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85z"/></svg>';
+
+function isFav(id) { return _favorites.includes(Number(id)); }
+
+// Botão-estrela para os cards do catálogo
+function favStarBtn(id) {
+  const on = isFav(id);
+  return `<button type="button" class="fav-btn${on ? ' is-fav' : ''}" data-fav-id="${id}"`
+    + ` aria-pressed="${on}" aria-label="${on ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}"`
+    + ` title="${on ? 'Remover dos favoritos' : 'Favoritar'}">${FAV_STAR_SVG}</button>`;
+}
+
+// Lookup id → link (varre o catálogo já carregado)
+function findLinkById(id) {
+  id = Number(id);
+  for (const cat of CATS) {
+    const l = cat.links.find(x => Number(x.id) === id);
+    if (l) return l;
+  }
+  return null;
+}
+
+function loadFavoritesLocal() {
+  try {
+    const raw = localStorage.getItem(FAV_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    _favorites = Array.isArray(arr) ? arr.map(Number).filter(n => !isNaN(n)) : [];
+  } catch { _favorites = []; }
+}
+
+function saveFavoritesLocal() {
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(_favorites)); } catch {}
+}
+
+function renderFavorites() {
+  const section = document.getElementById('fav-section');
+  const grid = document.getElementById('fav-grid');
+  if (!section || !grid) return;
+  const links = _favorites.map(findLinkById).filter(Boolean);
+  if (!links.length) {
+    grid.innerHTML = '';
+    section.classList.add('no-data');
+    return;
+  }
+  grid.innerHTML = links.map(l => `
+    <div class="fav-card-wrap">
+      <a class="fav-card" href="${esc(l.url)}" target="_blank" rel="noopener" data-link-id="${l.id}">
+        <div class="qicon">${esc(l.icon)}</div>
+        <span>${esc(l.title)}</span>
+      </a>
+      <button type="button" class="fav-btn is-fav" data-fav-id="${l.id}" aria-pressed="true" aria-label="Remover dos favoritos" title="Remover dos favoritos">${FAV_STAR_SVG}</button>
+    </div>`).join('');
+  section.classList.remove('no-data');
+  applyClickCounts();
+}
+
+// Sincroniza os botões-estrela dos cards do catálogo com o estado atual
+function syncStarButtons(id, on) {
+  document.querySelectorAll('.link-card .fav-btn[data-fav-id="' + id + '"]').forEach(btn => {
+    btn.classList.toggle('is-fav', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.setAttribute('aria-label', on ? 'Remover dos favoritos' : 'Adicionar aos favoritos');
+    btn.setAttribute('title', on ? 'Remover dos favoritos' : 'Favoritar');
+    if (on) {
+      btn.classList.remove('just-toggled');
+      void btn.offsetWidth; // reflow → reinicia a animação
+      btn.classList.add('just-toggled');
+    }
+  });
+}
+
+function toggleFavorite(id, sourceBtn) {
+  id = Number(id);
+  const wasFav = isFav(id);
+  if (wasFav) _favorites = _favorites.filter(x => x !== id);
+  else _favorites.unshift(id);
+  saveFavoritesLocal();
+
+  const paint = () => { renderFavorites(); syncStarButtons(id, !wasFav); };
+  // View Transitions API: cross-fade suave da mudança de layout (degrada sozinho)
+  if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.startViewTransition(paint);
+  } else {
+    paint();
+  }
+  persistFavorite(id, !wasFav);
+}
+
+// ─── SYNC COM SUPABASE (best-effort, exige sessão autenticada) ──────────
+async function favAuthHeaders() {
+  await refreshSession();
+  const s = getStoredSession();
+  const token = s?.access_token || SB_ANON;
+  return { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+}
+
+async function persistFavorite(id, add) {
+  const email = window._userEmail;
+  if (!email) return; // sem login → fica só no localStorage
+  try {
+    const headers = await favAuthHeaders();
+    if (add) {
+      await fetch(SB_URL + '/rest/v1/hub_favorites', {
+        method: 'POST',
+        headers: { ...headers, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ user_email: email, link_id: id })
+      });
+    } else {
+      await fetch(SB_URL + '/rest/v1/hub_favorites?user_email=eq.' + encodeURIComponent(email) + '&link_id=eq.' + id, {
+        method: 'DELETE',
+        headers
+      });
+    }
+  } catch (err) {
+    console.warn('Favorito não sincronizado (mantido localmente):', err);
+  }
+}
+
+async function syncFavoritesFromDB() {
+  const email = window._userEmail;
+  if (!email) return;
+  try {
+    const headers = await favAuthHeaders();
+    const res = await fetch(
+      SB_URL + '/rest/v1/hub_favorites?user_email=eq.' + encodeURIComponent(email) + '&select=link_id,created_at&order=created_at.desc',
+      { headers }
+    );
+    if (!res.ok) return;
+    const rows = await res.json();
+    const dbIds = rows.map(r => Number(r.link_id));
+    const localOnly = _favorites.filter(id => !dbIds.includes(id));
+    // União: DB (mais recentes primeiro) + favoritos locais que ainda não subiram
+    const merged = [...dbIds];
+    localOnly.forEach(id => { if (!merged.includes(id)) merged.push(id); });
+    // Empurra os locais que faltam pro DB
+    localOnly.forEach(id => persistFavorite(id, true));
+
+    const changed = merged.length !== _favorites.length || merged.some((v, i) => v !== _favorites[i]);
+    _favorites = merged;
+    saveFavoritesLocal();
+    if (changed) {
+      renderFavorites();
+      // Reaplica estado das estrelas nos cards já renderizados
+      document.querySelectorAll('.link-card .fav-btn').forEach(btn => {
+        const on = isFav(btn.dataset.favId);
+        btn.classList.toggle('is-fav', on);
+        btn.setAttribute('aria-pressed', String(on));
+      });
+    }
+  } catch (err) {
+    console.warn('Sync de favoritos indisponível:', err);
+  }
 }
 
 function renderCatChips() {
@@ -2654,17 +2944,19 @@ function renderSections() {
         ${grp.links.map(l => {
           const typeId = l._typeId;
           const catCls = l._cat ? l._cat.cls : 'op';
-          return `<a class="link-card" href="${esc(l.url)}" target="_blank" rel="noopener" data-type="${typeId}" data-link-id="${l.id}">
-            <div class="card-icon ${catCls}">${esc(l.icon)}</div>
+          return `<div class="link-card" data-type="${typeId}" data-link-id="${l.id}">
+            <a class="card-hit" href="${esc(l.url)}" target="_blank" rel="noopener" aria-label="${esc(l.title)}" title="${esc(l.title)}"></a>
+            <div class="card-icon ${catCls}" aria-hidden="true">${esc(l.icon)}</div>
             <div class="card-body">
               <div class="card-title" title="${esc(l.title)}">${hl(l.title, q)}${l.isNew ? '<span class="new-badge">Novo</span>' : ''}</div>
               <div class="card-desc">${hl(l.desc, q)}</div>
               ${l.team && l.team.length ? `<div class="card-teams">${l.team.map(t => `<span class="team-tag t-${esc(t.toLowerCase())}">${esc(t)}</span>`).join('')}${l.product && l.product.length ? l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('') : ''}</div>` : l.product && l.product.length ? `<div class="card-teams">${l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('')}</div>` : ''}
             </div>
-            <svg class="card-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+            ${favStarBtn(l.id)}
+            <svg class="card-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <path d="M4 16L16 4M9 4h7v7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </a>`;
+          </div>`;
         }).join('')}
       </div>
       </div></div>`;
@@ -2791,7 +3083,8 @@ function initSearch() {
     clearTimeout(t);
     t = setTimeout(() => {
       searchQuery = _normalize(e.target.value.trim());
-      // Animate quick & trending: hide during search, show when cleared
+      // Animate fav/quick/trending: hide during search, show when cleared
+      document.getElementById('fav-section').classList.toggle('search-hidden', !!searchQuery);
       document.getElementById('quick-section').classList.toggle('search-hidden', !!searchQuery);
       document.getElementById('trending-section').classList.toggle('search-hidden', !!searchQuery);
       renderSections();
@@ -2809,6 +3102,7 @@ function clearAllFiltersAndSearch() {
   updateTeamBtn(); updateTeamTags();
   updateProductBtn(); updateProductTags();
   syncMobileFilters();
+  document.getElementById('fav-section').classList.remove('search-hidden');
   document.getElementById('quick-section').classList.remove('search-hidden');
   document.getElementById('trending-section').classList.remove('search-hidden');
   renderSections();

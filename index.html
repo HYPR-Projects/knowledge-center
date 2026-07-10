@@ -444,10 +444,12 @@ img { display: block; max-width: 100%; }
   overflow: hidden;
 }
 /* Shrink parent section margin when collapsed */
+.fav-section:has(.section-collapse.collapsed),
 .quick-section:has(.section-collapse.collapsed),
 .trending-section:has(.section-collapse.collapsed) {
   margin-bottom: var(--sp-2);
 }
+.fav-section:has(.section-collapse.collapsed) .section-label,
 .quick-section:has(.section-collapse.collapsed) .section-label,
 .trending-section:has(.section-collapse.collapsed) .section-label {
   margin-bottom: 0;

@@ -43,6 +43,7 @@
   --topbar-bg: rgba(7,9,15,0.78);
   --search-bg: rgba(7,9,15,0.72);
   --tooltip-bg: #0d111e;
+  --wn-bg: rgba(18,23,37,.92);
   --mesh-opacity: 1;
   --grid-opacity: .022;
   --orb-opacity: 1;
@@ -68,6 +69,7 @@
   --topbar-bg: rgba(244,245,247,0.85);
   --search-bg: rgba(244,245,247,0.82);
   --tooltip-bg: #ffffff;
+  --wn-bg: rgba(255,255,255,.94);
   --mesh-opacity: .3;
   --grid-opacity: .035;
   --orb-opacity: .4;
@@ -1366,6 +1368,131 @@ img { display: block; max-width: 100%; }
 /* ─── HIGHLIGHT ──────────────────────── */
 mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; padding: 0 1px; }
 
+/* ─── WHAT'S NEW / ANNOUNCEMENT MODAL ── */
+.wn-overlay {
+  position: fixed; inset: 0; z-index: 700;
+  display: none; align-items: center; justify-content: center;
+  padding: var(--sp-5);
+  background: rgba(3,5,10,.55);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  opacity: 0; transition: opacity .35s ease;
+}
+.wn-overlay.show { display: flex; }
+.wn-overlay.open { opacity: 1; }
+.wn-card {
+  position: relative; width: min(440px, 100%);
+  background: var(--wn-bg);
+  border: 1px solid var(--bord-h);
+  border-radius: var(--r-lg);
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  box-shadow: 0 40px 120px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+  text-align: center;
+  opacity: 0; transform: translateY(18px) scale(.95);
+  transition: transform .45s cubic-bezier(.2,.85,.25,1), opacity .35s ease;
+  overflow: hidden;
+}
+.wn-overlay.open .wn-card { opacity: 1; transform: translateY(0) scale(1); }
+/* faixa de destaque no topo */
+.wn-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--fav));
+}
+.wn-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); background: transparent; border: none; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.wn-close:hover { background: var(--surf-h); color: var(--text); }
+.wn-close svg { width: 16px; height: 16px; }
+.wn-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--accent2); background: rgba(17,161,203,.12);
+  border: 1px solid rgba(17,161,203,.28);
+  padding: 5px 13px; border-radius: 100px; margin-bottom: var(--sp-6);
+}
+.wn-title { font-size: 21px; font-weight: 700; color: var(--text); margin-bottom: var(--sp-3); letter-spacing: -.01em; }
+.wn-desc { font-size: 14px; line-height: 1.55; color: var(--text-2); margin-bottom: var(--sp-6); }
+.wn-desc b { color: var(--text); font-weight: 600; }
+.wn-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 30px; border-radius: 100px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; font-size: 14px; font-weight: 600; border: none; cursor: pointer;
+  box-shadow: 0 8px 24px rgba(17,161,203,.3);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.wn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(17,161,203,.42); }
+
+/* Demo animada: card com estrela + prateleira de favoritos */
+.wn-demo {
+  width: 100%; max-width: 300px; margin: 0 auto var(--sp-6);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.wn-shelf { display: flex; align-items: center; gap: 10px; min-height: 34px; }
+.wn-shelf-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--text-2); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.wn-shelf-label::before { content: '★'; color: var(--fav); font-size: 11px; }
+.wn-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px 6px 7px; border-radius: 10px;
+  background: rgba(245,180,60,.1); border: 1px solid rgba(245,180,60,.3);
+  font-size: 12px; font-weight: 600; color: var(--text);
+  opacity: 0; animation: wnChip 3.8s ease-in-out infinite;
+}
+.wn-cicon { width: 20px; height: 20px; border-radius: 6px; background: rgba(245,180,60,.2); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.wn-democard {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  padding: 13px 15px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.wn-dicon { width: 38px; height: 38px; border-radius: 10px; background: rgba(59,130,246,.16); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.wn-dbody { flex: 1; min-width: 0; text-align: left; }
+.wn-dtitle { font-size: 13px; font-weight: 600; color: var(--text); }
+.wn-dsub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.wn-star { position: relative; flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; animation: wnPress 3.8s ease-in-out infinite; }
+.wn-star svg { position: absolute; width: 22px; height: 22px; }
+.wn-s-outline { color: var(--muted); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
+.wn-s-fill { color: var(--fav); fill: currentColor; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; opacity: 0; animation: wnFill 3.8s ease-in-out infinite; }
+.wn-tap { position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--fav); opacity: 0; animation: wnTap 3.8s ease-in-out infinite; }
+
+@keyframes wnPress { 0%,15%{transform:scale(1)} 21%{transform:scale(.82)} 30%{transform:scale(1)} 100%{transform:scale(1)} }
+@keyframes wnFill {
+  0%,18% { opacity:0; transform:scale(.5); }
+  27%    { opacity:1; transform:scale(1.28); }
+  36%,82%{ opacity:1; transform:scale(1); }
+  90%,100%{ opacity:0; transform:scale(.5); }
+}
+@keyframes wnTap {
+  0%,14% { opacity:0; transform:scale(.5); }
+  20%    { opacity:.65; transform:scale(.7); }
+  30%    { opacity:0; transform:scale(1.5); }
+  100%   { opacity:0; }
+}
+@keyframes wnChip {
+  0%,30% { opacity:0; transform:translateY(8px) scale(.92); }
+  42%,82%{ opacity:1; transform:translateY(0) scale(1); }
+  90%,100%{ opacity:0; transform:translateY(8px) scale(.92); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-overlay, .wn-card { transition: opacity .2s ease; }
+  .wn-card { transform: none; }
+  .wn-star, .wn-s-fill, .wn-tap, .wn-chip { animation: none; }
+  .wn-s-fill { opacity: 1; }
+  .wn-chip { opacity: 1; }
+  .wn-cta:hover { transform: none; }
+}
+@media (max-width: 640px) {
+  .wn-card { padding: var(--sp-8) var(--sp-5) var(--sp-5); }
+  .wn-title { font-size: 19px; }
+}
+
 /* ─────────────────────────────────────── */
 /* RESPONSIVE                              */
 /* ─────────────────────────────────────── */
@@ -1653,6 +1780,39 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
         <div class="emoji">🔍</div>
         <p id="empty-msg">Nenhum resultado encontrado.</p>
         <button class="empty-clear-btn" id="empty-clear-btn" style="display:none" onclick="clearAllFiltersAndSearch()">Limpar filtros e busca</button>
+      </div>
+
+      <!-- What's New: anúncio da feature de Favoritos -->
+      <div class="wn-overlay" id="wn-overlay" role="dialog" aria-modal="true" aria-labelledby="wn-title" aria-describedby="wn-desc" hidden>
+        <div class="wn-card">
+          <button type="button" class="wn-close" id="wn-close" aria-label="Fechar aviso">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5l10 10M15 5L5 15" stroke-linecap="round"/></svg>
+          </button>
+          <span class="wn-badge">✨ Novidade</span>
+
+          <div class="wn-demo" aria-hidden="true">
+            <div class="wn-shelf">
+              <span class="wn-shelf-label">Favoritos</span>
+              <span class="wn-chip"><span class="wn-cicon">💼</span>Sales Manager</span>
+            </div>
+            <div class="wn-democard">
+              <div class="wn-dicon">💼</div>
+              <div class="wn-dbody">
+                <div class="wn-dtitle">Sales Manager</div>
+                <div class="wn-dsub">Plataforma de vendas</div>
+              </div>
+              <span class="wn-star">
+                <span class="wn-tap"></span>
+                <svg class="wn-s-outline" viewBox="0 0 20 20"><path d="M10 1.7l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.88l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85z"/></svg>
+                <svg class="wn-s-fill" viewBox="0 0 20 20"><path d="M10 1.7l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.88l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85z"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <h2 class="wn-title" id="wn-title">Agora você pode favoritar ⭐</h2>
+          <p class="wn-desc" id="wn-desc">Clique na estrela de qualquer card pra guardá-lo em <b>Favoritos</b>, no topo do hub. Monte seus próprios atalhos e chegue num clique aos links que você mais usa.</p>
+          <button type="button" class="wn-cta" id="wn-cta">Entendi, bora explorar</button>
+        </div>
       </div>
     </main>
   </div>
@@ -2180,6 +2340,7 @@ async function renderHub() {
   initClickTracking();
   loadClickCounts();
   syncFavoritesFromDB();
+  maybeShowAnnouncement();
 }
 
 // ─── CLICK COUNTS (all-time por card) ───────────────────────────────────
@@ -3110,10 +3271,73 @@ function clearAllFiltersAndSearch() {
   renderSections();
 }
 
+// ─── WHAT'S NEW / ANÚNCIO (Favoritos) ───────────────────────────────────
+// Aparece uma vez por usuário na primeira visita. A campanha expira sozinha
+// em ~1 mês, então mesmo quem nunca abriu deixa de ver depois disso.
+const WN_KEY   = 'hypr-hub-seen-favoritos';
+const WN_UNTIL = Date.UTC(2026, 7, 15); // 15/ago/2026 (mês 7 = agosto)
+let _wnLastFocus = null;
+
+function maybeShowAnnouncement() {
+  try {
+    if (localStorage.getItem(WN_KEY) === '1') return;
+    if (Date.now() > WN_UNTIL) return;
+  } catch { return; }
+  setTimeout(showAnnouncement, 850); // deixa o hub assentar antes
+}
+
+function showAnnouncement() {
+  const ov = document.getElementById('wn-overlay');
+  if (!ov || ov.classList.contains('show')) return;
+  _wnLastFocus = document.activeElement;
+  ov.hidden = false;
+  ov.classList.add('show');
+  void ov.offsetWidth; // reflow → dispara a transição de entrada
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('wn-cta')?.focus();
+  document.addEventListener('keydown', _wnKeydown);
+}
+
+function closeAnnouncement() {
+  const ov = document.getElementById('wn-overlay');
+  if (!ov || !ov.classList.contains('show')) return;
+  try { localStorage.setItem(WN_KEY, '1'); } catch {}
+  ov.classList.remove('open');
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', _wnKeydown);
+  let done = false;
+  const finish = () => { if (done) return; done = true; ov.hidden = true; ov.classList.remove('show'); };
+  ov.addEventListener('transitionend', finish, { once: true });
+  setTimeout(finish, 450); // fallback
+  if (_wnLastFocus && _wnLastFocus.focus) { try { _wnLastFocus.focus(); } catch {} }
+}
+
+function _wnKeydown(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeAnnouncement(); return; }
+  if (e.key === 'Tab') {
+    const f = [document.getElementById('wn-close'), document.getElementById('wn-cta')].filter(Boolean);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+}
+
+function initAnnouncement() {
+  const ov = document.getElementById('wn-overlay');
+  if (!ov || ov._wired) return;
+  ov._wired = true;
+  document.getElementById('wn-close')?.addEventListener('click', closeAnnouncement);
+  document.getElementById('wn-cta')?.addEventListener('click', closeAnnouncement);
+  ov.addEventListener('click', e => { if (e.target === ov) closeAnnouncement(); }); // clique no backdrop
+}
+
 // ─── BOOT ─────────────────────────────────────────────────────────────────
 
 document.getElementById('btn-google').addEventListener('click', signInWithGoogle);
 document.getElementById('btn-logout').addEventListener('click', signOut);
+initAnnouncement();
 
 // Recalc slider on resize
 window.addEventListener('resize', () => updateViewSlider(true));

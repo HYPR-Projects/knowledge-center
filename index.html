@@ -24,7 +24,7 @@
   --accent2:    #3bbfe0;
   --text:       #e8ecf4;
   --text-2:     rgba(232,236,244,0.7);
-  --muted:      rgba(232,236,244,0.4);
+  --muted:      rgba(232,236,244,0.62);
   --r:          13px;
   --r-sm:       9px;
   --r-lg:       20px;
@@ -42,7 +42,6 @@
   --topbar-bg: rgba(7,9,15,0.78);
   --search-bg: rgba(7,9,15,0.72);
   --tooltip-bg: #0d111e;
-  --shadow-color: rgba(0,0,0,.3);
   --mesh-opacity: 1;
   --grid-opacity: .022;
   --orb-opacity: 1;
@@ -62,12 +61,11 @@
   --accent2:    #0a7a99;
   --text:       #1b262f;
   --text-2:     rgba(27,38,47,0.72);
-  --muted:      rgba(27,38,47,0.45);
+  --muted:      rgba(27,38,47,0.66);
   --login-card-bg: rgba(255,255,255,.82);
   --topbar-bg: rgba(244,245,247,0.85);
   --search-bg: rgba(244,245,247,0.82);
   --tooltip-bg: #ffffff;
-  --shadow-color: rgba(0,0,0,.08);
   --mesh-opacity: .3;
   --grid-opacity: .035;
   --orb-opacity: .4;
@@ -123,6 +121,17 @@ img { display: block; max-width: 100%; }
 }
 /* Remove default outline when not keyboard-navigating */
 :focus:not(:focus-visible) { outline: none; }
+
+/* ─── SR-ONLY (visually hidden, accessible) ── */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ─── BACKGROUND ─────────────────────── */
 .bg-mesh {
@@ -384,6 +393,10 @@ img { display: block; max-width: 100%; }
   display: flex; align-items: center; gap: var(--sp-3);
   user-select: none; cursor: pointer;
   transition: color .2s, margin-bottom .35s cubic-bezier(.4, 0, .2, 1);
+  /* button-tag neutralization (renders identically to prior div) */
+  width: 100%; text-align: left; padding: 0;
+  background: none; border: 0; appearance: none; -webkit-appearance: none;
+  font-family: inherit;
 }
 .section-label:hover { color: var(--text-2); }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -667,6 +680,9 @@ img { display: block; max-width: 100%; }
   display: flex; justify-content: center;
   padding: var(--sp-3) 0 var(--sp-2);
   cursor: pointer;
+  /* button-tag neutralization */
+  width: 100%; background: none; border: 0;
+  appearance: none; -webkit-appearance: none;
 }
 .mf-handle::after {
   content: '';
@@ -845,6 +861,26 @@ img { display: block; max-width: 100%; }
   from { opacity: 0; transform: translateY(-4px) scale(.99); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+/* ─── Consolidated "Filtros" panel (single dropdown, 4 dimensions) ── */
+.filters-dropdown {
+  min-width: 300px;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.filter-dim {
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+.filter-dim:first-of-type {
+  padding-top: 0; margin-top: 0; border-top: none;
+}
+.filter-dim-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: var(--sp-3);
+}
 .dropdown-header {
   display: flex; align-items: center; justify-content: space-between;
   padding-bottom: var(--sp-3);
@@ -979,12 +1015,16 @@ img { display: block; max-width: 100%; }
 .cat-header {
   display: flex; align-items: center; gap: var(--sp-3);
   margin-bottom: var(--sp-5);
-  padding-bottom: var(--sp-4);
+  padding: 0 0 var(--sp-4);
   border-bottom: 1px solid var(--border);
   cursor: pointer; user-select: none;
   transition: margin-bottom .35s cubic-bezier(.4, 0, .2, 1),
               padding-bottom .35s cubic-bezier(.4, 0, .2, 1),
               border-color .25s ease;
+  /* button-tag neutralization (renders identically to prior div) */
+  width: 100%; text-align: left;
+  background: none; appearance: none; -webkit-appearance: none;
+  font-family: inherit; color: inherit;
 }
 .cat-header:hover .grp-toggle { background: var(--surface); border-color: var(--border); color: var(--text); }
 .cat-section.grp-collapsed .cat-header { margin-bottom: 0; padding-bottom: 0; border-bottom-color: transparent; }
@@ -1082,7 +1122,8 @@ img { display: block; max-width: 100%; }
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.05);
 }
-.link-card:hover::before { opacity: 1; }
+.link-card:hover::before,
+.link-card:focus-visible::before { opacity: 1; }
 .card-icon {
   width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -1163,7 +1204,8 @@ img { display: block; max-width: 100%; }
   width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px;
   color: var(--muted); opacity: .25; transition: opacity .18s, transform .18s;
 }
-.link-card:hover .card-arrow { opacity: 1; transform: translate(2px,-2px); }
+.link-card:hover .card-arrow,
+.link-card:focus-visible .card-arrow { opacity: 1; transform: translate(2px,-2px); }
 
 /* ─── EMPTY STATE ────────────────────── */
 .empty-state { text-align: center; padding: 60px 20px; display: none; }
@@ -1331,7 +1373,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
           <span class="topbar-logo-text">Knowledge <em>Hub</em></span>
         </a>
         <div class="topbar-user">
-          <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+          <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema" aria-label="Alternar tema">
             <svg class="icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M17.3 13.3A7.5 7.5 0 116.7 2.7a5.5 5.5 0 0010.6 10.6z" stroke-linejoin="round"/>
             </svg>
@@ -1339,14 +1381,14 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
               <circle cx="10" cy="10" r="3.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke-linecap="round"/>
             </svg>
           </button>
-          <a class="btn-admin" id="btn-admin" href="admin.html" style="display:none" title="Admin">
+          <a class="btn-admin" id="btn-admin" href="admin.html" style="display:none" title="Admin" aria-label="Abrir painel admin">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7">
               <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/>
               <path d="M16.2 12.2a1.4 1.4 0 00.3 1.5l.05.05a1.7 1.7 0 11-2.4 2.4l-.05-.05a1.4 1.4 0 00-1.5-.3 1.4 1.4 0 00-.85 1.3v.13a1.7 1.7 0 11-3.4 0v-.07a1.4 1.4 0 00-.9-1.3 1.4 1.4 0 00-1.5.3l-.05.05a1.7 1.7 0 11-2.4-2.4l.05-.05a1.4 1.4 0 00.3-1.5 1.4 1.4 0 00-1.3-.85H2.4a1.7 1.7 0 110-3.4h.07a1.4 1.4 0 001.3-.9 1.4 1.4 0 00-.3-1.5L3.42 5.5a1.7 1.7 0 112.4-2.4l.05.05a1.4 1.4 0 001.5.3h.07a1.4 1.4 0 00.85-1.3V2.0a1.7 1.7 0 013.4 0v.07a1.4 1.4 0 00.85 1.3 1.4 1.4 0 001.5-.3l.05-.05a1.7 1.7 0 112.4 2.4l-.05.05a1.4 1.4 0 00-.3 1.5v.07a1.4 1.4 0 001.3.85h.13a1.7 1.7 0 010 3.4h-.07a1.4 1.4 0 00-1.3.85z" stroke-linejoin="round"/>
             </svg>
           </a>
           <div class="user-avatar" id="user-avatar">?</div>
-          <button class="btn-logout" id="btn-logout">
+          <button class="btn-logout" id="btn-logout" aria-label="Sair">
             <span>Sair</span>
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M13 3h4a1 1 0 011 1v12a1 1 0 01-1 1h-4M9 14l4-4-4-4M13 10H3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1364,8 +1406,9 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
             <circle cx="8.5" cy="8.5" r="5.5"/>
             <path d="M15 15l-3-3" stroke-linecap="round"/>
           </svg>
-          <input class="search-input" id="search" type="text" placeholder="Buscar link... (⌘K)" autocomplete="off" />
+          <input class="search-input" id="search" type="text" placeholder="Buscar link... (⌘K)" autocomplete="off" aria-label="Buscar links" />
         </div>
+        <div class="sr-only" aria-live="polite" id="results-live"></div>
       </div>
     </div>
 
@@ -1379,52 +1422,35 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
         <div class="controls-sep"></div>
         <div class="filter-bar" id="filter-bar">
           <span class="filter-bar-label">Filtros</span>
-          <div class="type-filter-btn" id="cat-filter-wrap">
-            <button class="type-btn" id="cat-btn" onclick="toggleCatDropdown()">
-              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
-              <span id="cat-btn-label">Categoria</span>
+          <div class="type-filter-btn" id="filters-wrap">
+            <button class="type-btn" id="filters-btn" onclick="toggleFiltersDropdown()" aria-expanded="false" aria-controls="filters-dropdown">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4h12M4 8h8M6 12h4" stroke-linecap="round"/></svg>
+              <span id="filters-btn-label">Filtros</span>
+              <span class="filter-badge" id="filters-badge" style="display:none">0</span>
               <svg class="type-btn-chevron" viewBox="0 0 12 7" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="type-dropdown" id="cat-dropdown">
-              <div class="dropdown-header"><span>Filtrar por categoria</span><button class="dropdown-clear" id="cat-dropdown-clear" onclick="clearCatFilters()">Limpar</button></div>
-              <div class="type-chips" id="cat-chips"></div>
-              <div class="active-type-tags dd-tags" id="active-cat-tags"></div>
-            </div>
-          </div>
-          <div class="type-filter-btn" id="type-filter-wrap">
-            <button class="type-btn" id="type-btn" onclick="toggleTypeDropdown()">
-              <svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M0 1h16M3 6h10M6 11h4" stroke-linecap="round"/></svg>
-              <span id="type-btn-label">Tipo</span>
-              <svg class="type-btn-chevron" viewBox="0 0 12 7" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="type-dropdown" id="type-dropdown">
-              <div class="dropdown-header"><span>Filtrar por tipo</span><button class="dropdown-clear" id="dropdown-clear" onclick="clearTypeFilters()">Limpar</button></div>
-              <div class="type-chips" id="type-chips"></div>
-              <div class="active-type-tags dd-tags" id="active-type-tags"></div>
-            </div>
-          </div>
-          <div class="type-filter-btn" id="team-filter-wrap">
-            <button class="type-btn" id="team-btn" onclick="toggleTeamDropdown()">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="3"/><circle cx="12" cy="6" r="2.5"/><path d="M0 15c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke-linecap="round"/></svg>
-              <span id="team-btn-label">Área</span>
-              <svg class="type-btn-chevron" viewBox="0 0 12 7" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="type-dropdown" id="team-dropdown">
-              <div class="dropdown-header"><span>Filtrar por área</span><button class="dropdown-clear" id="team-dropdown-clear" onclick="clearTeamFilters()">Limpar</button></div>
-              <div class="type-chips" id="team-chips"></div>
-              <div class="active-type-tags dd-tags" id="active-team-tags"></div>
-            </div>
-          </div>
-          <div class="type-filter-btn" id="product-filter-wrap">
-            <button class="type-btn" id="product-btn" onclick="toggleProductDropdown()">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 10h4" stroke-linecap="round"/></svg>
-              <span id="product-btn-label">Produto</span>
-              <svg class="type-btn-chevron" viewBox="0 0 12 7" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="type-dropdown" id="product-dropdown">
-              <div class="dropdown-header"><span>Filtrar por produto</span><button class="dropdown-clear" id="product-dropdown-clear" onclick="clearProductFilters()">Limpar</button></div>
-              <div class="type-chips" id="product-chips"></div>
-              <div class="active-type-tags dd-tags" id="active-product-tags"></div>
+            <div class="type-dropdown filters-dropdown" id="filters-dropdown" role="group" aria-label="Filtros">
+              <div class="dropdown-header"><span>Filtros</span><button class="dropdown-clear" id="filters-clear-all" onclick="clearAllDesktopFilters()">Limpar tudo</button></div>
+              <div class="filter-dim">
+                <div class="filter-dim-label">Categoria</div>
+                <div class="type-chips" id="cat-chips"></div>
+                <div class="active-type-tags dd-tags" id="active-cat-tags"></div>
+              </div>
+              <div class="filter-dim">
+                <div class="filter-dim-label">Tipo</div>
+                <div class="type-chips" id="type-chips"></div>
+                <div class="active-type-tags dd-tags" id="active-type-tags"></div>
+              </div>
+              <div class="filter-dim">
+                <div class="filter-dim-label">Área</div>
+                <div class="type-chips" id="team-chips"></div>
+                <div class="active-type-tags dd-tags" id="active-team-tags"></div>
+              </div>
+              <div class="filter-dim">
+                <div class="filter-dim-label">Produto</div>
+                <div class="type-chips" id="product-chips"></div>
+                <div class="active-type-tags dd-tags" id="active-product-tags"></div>
+              </div>
             </div>
           </div>
         </div><!-- /filter-bar -->
@@ -1433,7 +1459,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
           <span>Filtros</span>
           <span class="mobile-filter-badge" id="mobile-filter-badge" style="display:none">0</span>
         </button>
-        <button class="toggle-all-btn" id="toggle-all-btn" onclick="toggleAllGroups()" title="Expandir/colapsar todos">
+        <button class="toggle-all-btn" id="toggle-all-btn" onclick="toggleAllGroups()" title="Expandir/colapsar todos" aria-label="Expandir/recolher tudo" aria-expanded="true">
           <svg id="toggle-all-icon-collapse" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M5 8h6" stroke-linecap="round"/></svg>
           <svg id="toggle-all-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><circle cx="8" cy="8" r="6.5"/><path d="M5 8h6M8 5v6" stroke-linecap="round"/></svg>
         </button>
@@ -1442,13 +1468,14 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
 
     <!-- Main content -->
     <main class="hub-main">
+      <h1 class="sr-only">HYPR Knowledge Hub</h1>
       <!-- Shortcuts zone: elevated surface -->
       <div class="shortcuts-zone">
       <section class="quick-section" id="quick-section">
-        <div class="section-label" onclick="toggleSection('quick')">
-          Acesso rápido
-          <button class="section-toggle" id="toggle-quick" title="Expandir/minimizar"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
+        <button type="button" class="section-label" onclick="toggleSection('quick')" aria-expanded="true" aria-controls="collapse-quick">
+          <span>Acesso rápido</span>
+          <span class="section-toggle" id="toggle-quick" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
         <div class="section-collapse" id="collapse-quick">
           <div>
             <div class="quick-grid" id="quick-grid"></div>
@@ -1457,10 +1484,10 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
       </section>
 
       <section class="trending-section no-data" id="trending-section">
-        <div class="section-label" onclick="toggleSection('trending')">
-          Mais acessados <small style="font-weight:400;letter-spacing:0;text-transform:none;font-size:10px;opacity:.7">últimos 60 dias</small>
-          <button class="section-toggle" id="toggle-trending" title="Expandir/minimizar"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
+        <button type="button" class="section-label" onclick="toggleSection('trending')" aria-expanded="true" aria-controls="collapse-trending">
+          <span>Mais acessados <small style="font-weight:400;letter-spacing:0;text-transform:none;font-size:10px;opacity:.7">últimos 60 dias</small></span>
+          <span class="section-toggle" id="toggle-trending" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
         <div class="section-collapse" id="collapse-trending">
           <div>
             <div class="trending-grid" id="trending-grid"></div>
@@ -1473,8 +1500,8 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
 
       <!-- Mobile unified filter sheet -->
       <div class="mf-overlay" id="mf-overlay" onclick="closeMobileFilters()"></div>
-      <div class="mf-sheet" id="mf-sheet">
-        <div class="mf-handle" onclick="closeMobileFilters()"></div>
+      <div class="mf-sheet" id="mf-sheet" role="dialog" aria-modal="true" aria-label="Filtros">
+        <button type="button" class="mf-handle" onclick="closeMobileFilters()" aria-label="Fechar filtros"></button>
         <div class="mf-header">
           <span class="mf-title">Filtros</span>
           <button class="mf-clear" id="mf-clear" onclick="clearAllMobileFilters()">Limpar tudo</button>
@@ -1946,6 +1973,8 @@ function toggleSection(key) {
   if (!collapse || !toggle) return;
   const isCollapsed = collapse.classList.toggle('collapsed');
   toggle.classList.toggle('collapsed', isCollapsed);
+  const labelBtn = document.querySelector('[aria-controls="collapse-' + key + '"]');
+  if (labelBtn) labelBtn.setAttribute('aria-expanded', !isCollapsed);
   localStorage.setItem('hypr-hub-' + key + '-collapsed', isCollapsed ? '1' : '');
 }
 
@@ -1956,6 +1985,8 @@ function restoreCollapsedSections() {
       const toggle = document.getElementById('toggle-' + key);
       if (collapse) collapse.classList.add('collapsed');
       if (toggle) toggle.classList.add('collapsed');
+      const labelBtn = document.querySelector('[aria-controls="collapse-' + key + '"]');
+      if (labelBtn) labelBtn.setAttribute('aria-expanded', 'false');
     }
   });
 }
@@ -1966,6 +1997,7 @@ function toggleGroup(headerEl) {
   const sec = headerEl.closest('.cat-section');
   if (!sec) return;
   const isCollapsed = sec.classList.toggle('grp-collapsed');
+  if (headerEl.setAttribute) headerEl.setAttribute('aria-expanded', !isCollapsed);
   const key = sec.dataset.grpKey;
   if (key) localStorage.setItem('hypr-hub-grp-' + key, isCollapsed ? '1' : '');
   updateToggleAllIcon();
@@ -1978,6 +2010,8 @@ function toggleAllGroups() {
   sections.forEach(s => {
     const shouldCollapse = !allCollapsed;
     s.classList.toggle('grp-collapsed', shouldCollapse);
+    const h = s.querySelector('.cat-header');
+    if (h) h.setAttribute('aria-expanded', !shouldCollapse);
     const key = s.dataset.grpKey;
     if (key) localStorage.setItem('hypr-hub-grp-' + key, shouldCollapse ? '1' : '');
   });
@@ -1992,7 +2026,10 @@ function updateToggleAllIcon() {
   if (iconCollapse) iconCollapse.style.display = allCollapsed ? 'none' : '';
   if (iconExpand) iconExpand.style.display = allCollapsed ? '' : 'none';
   const btn = document.getElementById('toggle-all-btn');
-  if (btn) btn.title = allCollapsed ? 'Expandir todos' : 'Colapsar todos';
+  if (btn) {
+    btn.title = allCollapsed ? 'Expandir todos' : 'Colapsar todos';
+    btn.setAttribute('aria-expanded', !allCollapsed);
+  }
 }
 
 // ─── RENDER ──────────────────────────────────────────────────────────────
@@ -2185,7 +2222,7 @@ function renderQuick() {
 
 function renderCatChips() {
   document.getElementById('cat-chips').innerHTML = CATS
-    .map(c => `<button class="type-chip ${activeCats.has(c.id) ? 'active' : ''}" data-cat="${c.id}" onclick="toggleCat('${c.id}')"><span class="chip-dot"></span>${c.icon} ${c.label}</button>`)
+    .map(c => `<button class="type-chip ${activeCats.has(c.id) ? 'active' : ''}" aria-pressed="${activeCats.has(c.id)}" data-cat="${c.id}" onclick="toggleCat('${c.id}')"><span class="chip-dot"></span>${c.icon} ${c.label}</button>`)
     .join('');
 }
 
@@ -2197,7 +2234,7 @@ function renderTypeChips() {
   document.getElementById('type-chips').innerHTML = TYPES
     .filter(t => usedTypes.has(t.id))
     .map(t => `
-      <button class="type-chip ${activeTypes.has(t.id) ? 'active' : ''}"
+      <button class="type-chip ${activeTypes.has(t.id) ? 'active' : ''}" aria-pressed="${activeTypes.has(t.id)}"
         data-type="${t.id}" onclick="toggleType('${t.id}')">
         <span class="chip-dot"></span>
         ${t.icon} ${t.label}
@@ -2211,7 +2248,9 @@ function toggleCat(id) {
   if (activeCats.has(id)) activeCats.delete(id);
   else activeCats.add(id);
   document.querySelectorAll('#cat-chips .type-chip').forEach(c => {
-    c.classList.toggle('active', activeCats.has(c.dataset.cat));
+    const on = activeCats.has(c.dataset.cat);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', on);
   });
   updateCatBtn(); updateCatTags();
   renderSections();
@@ -2225,7 +2264,9 @@ function toggleType(id) {
   }
   // Toggle chip class in-place instead of full re-render
   document.querySelectorAll('#type-chips .type-chip').forEach(c => {
-    c.classList.toggle('active', activeTypes.has(c.dataset.type));
+    const on = activeTypes.has(c.dataset.type);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', on);
   });
   updateTypeBtn();
   updateActiveTags();
@@ -2235,26 +2276,27 @@ function toggleType(id) {
 // ─── GENERIC FILTER INFRASTRUCTURE ──────────────────────────────────────
 
 const FILTER_CFG = {
-  category: { set: () => activeCats, btnId: 'cat-btn', lblId: 'cat-btn-label', ddId: 'cat-dropdown', clrId: 'cat-dropdown-clear', wrapId: 'cat-filter-wrap', tagsId: 'active-cat-tags', dataAttr: 'cat', defaultLabel: 'Categoria', lookup: id => CATS.find(x => x.id === id), tagContent: t => `${t.icon} ${t.label}`, toggleFn: 'toggleCat' },
-  type:    { set: () => activeTypes,    btnId: 'type-btn',    lblId: 'type-btn-label',    ddId: 'type-dropdown',    clrId: 'dropdown-clear',         wrapId: 'type-filter-wrap',    tagsId: 'active-type-tags',    dataAttr: 'type',    defaultLabel: 'Tipo',    lookup: id => TYPES.find(x => x.id === id),    tagContent: t => `${t.icon} ${t.label}`,    toggleFn: 'toggleType' },
-  team:    { set: () => activeTeams,    btnId: 'team-btn',    lblId: 'team-btn-label',    ddId: 'team-dropdown',    clrId: 'team-dropdown-clear',    wrapId: 'team-filter-wrap',    tagsId: 'active-team-tags',    dataAttr: 'team',    defaultLabel: 'Área',    lookup: id => TEAMS.find(x => x.id === id),    tagContent: t => t.label,    toggleFn: 'toggleTeam' },
-  product: { set: () => activeProducts, btnId: 'product-btn', lblId: 'product-btn-label', ddId: 'product-dropdown', clrId: 'product-dropdown-clear', wrapId: 'product-filter-wrap', tagsId: 'active-product-tags', dataAttr: 'product', defaultLabel: 'Produto', lookup: id => PRODUCTS.find(x => x.id === id), tagContent: t => t.label, toggleFn: 'toggleProduct' },
+  category: { set: () => activeCats,    tagsId: 'active-cat-tags',     dataAttr: 'cat',     lookup: id => CATS.find(x => x.id === id),     tagContent: t => `${t.icon} ${t.label}`, toggleFn: 'toggleCat' },
+  type:    { set: () => activeTypes,    tagsId: 'active-type-tags',    dataAttr: 'type',    lookup: id => TYPES.find(x => x.id === id),    tagContent: t => `${t.icon} ${t.label}`, toggleFn: 'toggleType' },
+  team:    { set: () => activeTeams,    tagsId: 'active-team-tags',    dataAttr: 'team',    lookup: id => TEAMS.find(x => x.id === id),    tagContent: t => t.label,                toggleFn: 'toggleTeam' },
+  product: { set: () => activeProducts, tagsId: 'active-product-tags', dataAttr: 'product', lookup: id => PRODUCTS.find(x => x.id === id), tagContent: t => t.label,                toggleFn: 'toggleProduct' },
 };
 
 function _updateFilterBtn(key) {
-  const cfg = FILTER_CFG[key];
-  const btn = document.getElementById(cfg.btnId);
-  const lbl = document.getElementById(cfg.lblId);
-  const clr = document.getElementById(cfg.clrId);
-  const count = cfg.set().size;
-  btn.classList.toggle('has-filter', count > 0);
-  clr.classList.toggle('visible', count > 0);
-  let badge = btn.querySelector('.filter-badge');
-  if (count > 0) {
-    if (!badge) { badge = document.createElement('span'); badge.className = 'filter-badge'; btn.insertBefore(badge, lbl); }
-    badge.textContent = count;
-  } else if (badge) { badge.remove(); }
-  lbl.textContent = cfg.defaultLabel;
+  // The four per-dimension trigger buttons were consolidated into a single
+  // "Filtros" button + panel; per-dimension count/label updates are a no-op now.
+  updateFiltersButton();
+}
+
+// Single consolidated "Filtros" button: total badge across all 4 dimensions.
+function updateFiltersButton() {
+  const total = activeCats.size + activeTypes.size + activeTeams.size + activeProducts.size;
+  const btn = document.getElementById('filters-btn');
+  const badge = document.getElementById('filters-badge');
+  const clrAll = document.getElementById('filters-clear-all');
+  if (btn) btn.classList.toggle('has-filter', total > 0);
+  if (badge) { badge.textContent = total; badge.style.display = total > 0 ? '' : 'none'; }
+  if (clrAll) clrAll.classList.toggle('visible', total > 0);
 }
 
 function _updateFilterTags(key) {
@@ -2264,40 +2306,37 @@ function _updateFilterTags(key) {
   if (set.size === 0) { wrap.innerHTML = ''; return; }
   wrap.innerHTML = [...set].map(id => {
     const item = cfg.lookup(id);
-    return `<button class="active-tag" data-${cfg.dataAttr}="${id}" onclick="${cfg.toggleFn}('${id}')" title="Remover filtro ${item.label}">
+    return `<button class="active-tag" data-${cfg.dataAttr}="${id}" onclick="${cfg.toggleFn}('${id}')" title="Remover filtro ${item.label}" aria-label="Remover filtro ${item.label}">
       ${cfg.tagContent(item)}
       <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/></svg>
     </button>`;
   }).join('');
 }
 
-function _toggleDropdown(key) {
-  const cfg = FILTER_CFG[key];
-  // Close other dropdowns
-  Object.keys(FILTER_CFG).forEach(k => {
-    if (k !== key) {
-      document.getElementById(FILTER_CFG[k].ddId)?.classList.remove('open');
-      document.getElementById(FILTER_CFG[k].btnId)?.classList.remove('open');
-    }
-  });
-  const dd = document.getElementById(cfg.ddId);
-  const btn = document.getElementById(cfg.btnId);
+// Single consolidated filter panel open/close
+function toggleFiltersDropdown() {
+  const dd = document.getElementById('filters-dropdown');
+  const btn = document.getElementById('filters-btn');
+  if (!dd || !btn) return;
   const isOpen = dd.classList.toggle('open');
   btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
-// Close dropdown on outside click
+function closeFiltersDropdown() {
+  const dd = document.getElementById('filters-dropdown');
+  const btn = document.getElementById('filters-btn');
+  if (dd) dd.classList.remove('open');
+  if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+}
+
+// Close panel on outside click
 document.addEventListener('click', e => {
-  Object.values(FILTER_CFG).forEach(cfg => {
-    const wrap = document.getElementById(cfg.wrapId);
-    if (wrap && !wrap.contains(e.target)) {
-      document.getElementById(cfg.ddId)?.classList.remove('open');
-      document.getElementById(cfg.btnId)?.classList.remove('open');
-    }
-  });
+  const wrap = document.getElementById('filters-wrap');
+  if (wrap && !wrap.contains(e.target)) closeFiltersDropdown();
 });
 
-// Close dropdowns and mobile sheet on Escape, Cmd/Ctrl+K to focus search
+// Close panel/mobile sheet on Escape, Cmd/Ctrl+K to focus search
 document.addEventListener('keydown', e => {
   // Cmd/Ctrl+K → focus search
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -2307,17 +2346,13 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (e.key === 'Escape') {
-    let closed = false;
-    Object.values(FILTER_CFG).forEach(cfg => {
-      const dd = document.getElementById(cfg.ddId);
-      if (dd?.classList.contains('open')) {
-        dd.classList.remove('open');
-        document.getElementById(cfg.btnId)?.classList.remove('open');
-        document.getElementById(cfg.btnId)?.focus();
-        closed = true;
-      }
-    });
-    if (!closed && document.getElementById('mf-sheet')?.classList.contains('open')) {
+    const dd = document.getElementById('filters-dropdown');
+    if (dd?.classList.contains('open')) {
+      closeFiltersDropdown();
+      document.getElementById('filters-btn')?.focus();
+      return;
+    }
+    if (document.getElementById('mf-sheet')?.classList.contains('open')) {
       closeMobileFilters();
     }
   }
@@ -2327,27 +2362,54 @@ document.addEventListener('keydown', e => {
 
 function updateCatBtn()    { _updateFilterBtn('category'); }
 function updateCatTags()   { _updateFilterTags('category'); }
-function toggleCatDropdown()    { _toggleDropdown('category'); }
 function clearCatFilters() { activeCats.clear(); renderCatChips(); updateCatBtn(); updateCatTags(); renderSections(); syncMobileFilters(); }
 
 function updateTypeBtn()    { _updateFilterBtn('type'); }
 function updateActiveTags() { _updateFilterTags('type'); }
-function toggleTypeDropdown()    { _toggleDropdown('type'); }
 function clearTypeFilters() { activeTypes.clear(); renderTypeChips(); updateTypeBtn(); updateActiveTags(); renderSections(); syncMobileFilters(); }
 
 function updateTeamBtn()    { _updateFilterBtn('team'); }
 function updateTeamTags()   { _updateFilterTags('team'); }
-function toggleTeamDropdown()    { _toggleDropdown('team'); }
 function clearTeamFilters() { activeTeams.clear(); renderTeamChips(); updateTeamBtn(); updateTeamTags(); renderSections(); syncMobileFilters(); }
 
 function updateProductBtn()    { _updateFilterBtn('product'); }
 function updateProductTags()   { _updateFilterTags('product'); }
-function toggleProductDropdown()    { _toggleDropdown('product'); }
 function clearProductFilters() { activeProducts.clear(); renderProductChips(); updateProductBtn(); updateProductTags(); renderSections(); syncMobileFilters(); }
+
+// "Limpar tudo" in the consolidated desktop filter panel
+function clearAllDesktopFilters() {
+  activeCats.clear(); activeTypes.clear(); activeTeams.clear(); activeProducts.clear();
+  renderCatChips(); renderTypeChips(); renderTeamChips(); renderProductChips();
+  updateCatBtn(); updateCatTags();
+  updateTypeBtn(); updateActiveTags();
+  updateTeamBtn(); updateTeamTags();
+  updateProductBtn(); updateProductTags();
+  syncMobileFilters();
+  renderSections();
+}
 
 // ─── MOBILE FILTER SHEET ────────────────────────────────────────────────
 
+let _mfLastFocus = null;
+
+function _mfFocusable() {
+  const sheet = document.getElementById('mf-sheet');
+  if (!sheet) return [];
+  return [...sheet.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => el.offsetParent !== null || el === document.activeElement);
+}
+
+function _mfTrap(e) {
+  if (e.key !== 'Tab') return;
+  const f = _mfFocusable();
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
 function openMobileFilters() {
+  _mfLastFocus = document.activeElement;
   renderMobileChips();
   document.getElementById('mf-overlay').classList.add('open');
   const sheet = document.getElementById('mf-sheet');
@@ -2356,6 +2418,10 @@ function openMobileFilters() {
   sheet.offsetHeight;
   sheet.classList.add('open');
   document.body.style.overflow = 'hidden'; // prevent background scroll
+  // Move focus into the dialog and trap Tab within it
+  const f = _mfFocusable();
+  if (f.length) f[0].focus();
+  document.addEventListener('keydown', _mfTrap);
 }
 
 function closeMobileFilters() {
@@ -2363,14 +2429,18 @@ function closeMobileFilters() {
   const sheet = document.getElementById('mf-sheet');
   sheet.classList.remove('open');
   document.body.style.overflow = '';
+  document.removeEventListener('keydown', _mfTrap);
   setTimeout(() => { if (!sheet.classList.contains('open')) sheet.style.display = 'none'; }, 300);
+  // Restore focus to the element that opened the sheet
+  if (_mfLastFocus && _mfLastFocus.focus) _mfLastFocus.focus();
+  _mfLastFocus = null;
 }
 
 function renderMobileChips() {
   // Category
   const catEl = document.getElementById('mf-cat-chips');
   if (catEl) catEl.innerHTML = CATS.map(c =>
-    `<button class="type-chip ${activeCats.has(c.id) ? 'active' : ''}" data-cat="${c.id}" onclick="mfToggle('cat','${c.id}')"><span class="chip-dot"></span>${c.icon} ${c.label}</button>`
+    `<button class="type-chip ${activeCats.has(c.id) ? 'active' : ''}" aria-pressed="${activeCats.has(c.id)}" data-cat="${c.id}" onclick="mfToggle('cat','${c.id}')"><span class="chip-dot"></span>${c.icon} ${c.label}</button>`
   ).join('');
 
   // Type — only used types
@@ -2378,19 +2448,19 @@ function renderMobileChips() {
   CATS.forEach(cat => cat.links.forEach(l => usedTypes.add(l._typeId)));
   const typeEl = document.getElementById('mf-type-chips');
   if (typeEl) typeEl.innerHTML = TYPES.filter(t => usedTypes.has(t.id)).map(t =>
-    `<button class="type-chip ${activeTypes.has(t.id) ? 'active' : ''}" data-type="${t.id}" onclick="mfToggle('type','${t.id}')"><span class="chip-dot"></span>${t.icon} ${t.label}</button>`
+    `<button class="type-chip ${activeTypes.has(t.id) ? 'active' : ''}" aria-pressed="${activeTypes.has(t.id)}" data-type="${t.id}" onclick="mfToggle('type','${t.id}')"><span class="chip-dot"></span>${t.icon} ${t.label}</button>`
   ).join('');
 
   // Team
   const teamEl = document.getElementById('mf-team-chips');
   if (teamEl) teamEl.innerHTML = TEAMS.map(t =>
-    `<button class="type-chip ${activeTeams.has(t.id) ? 'active' : ''}" data-team="${t.id}" onclick="mfToggle('team','${t.id}')"><span class="chip-dot"></span>${t.label}</button>`
+    `<button class="type-chip ${activeTeams.has(t.id) ? 'active' : ''}" aria-pressed="${activeTeams.has(t.id)}" data-team="${t.id}" onclick="mfToggle('team','${t.id}')"><span class="chip-dot"></span>${t.label}</button>`
   ).join('');
 
   // Product
   const prodEl = document.getElementById('mf-prod-chips');
   if (prodEl) prodEl.innerHTML = PRODUCTS.map(p =>
-    `<button class="type-chip ${activeProducts.has(p.id) ? 'active' : ''}" data-product="${p.id}" onclick="mfToggle('prod','${p.id}')"><span class="chip-dot"></span>${p.label}</button>`
+    `<button class="type-chip ${activeProducts.has(p.id) ? 'active' : ''}" aria-pressed="${activeProducts.has(p.id)}" data-product="${p.id}" onclick="mfToggle('prod','${p.id}')"><span class="chip-dot"></span>${p.label}</button>`
   ).join('');
 
   updateMobileBadge();
@@ -2407,10 +2477,15 @@ function mfToggle(kind, id) {
 }
 
 function syncMobileChipState() {
-  document.querySelectorAll('#mf-cat-chips .type-chip').forEach(c => c.classList.toggle('active', activeCats.has(c.dataset.cat)));
-  document.querySelectorAll('#mf-type-chips .type-chip').forEach(c => c.classList.toggle('active', activeTypes.has(c.dataset.type)));
-  document.querySelectorAll('#mf-team-chips .type-chip').forEach(c => c.classList.toggle('active', activeTeams.has(c.dataset.team)));
-  document.querySelectorAll('#mf-prod-chips .type-chip').forEach(c => c.classList.toggle('active', activeProducts.has(c.dataset.product)));
+  const sync = (sel, set, key) => document.querySelectorAll(sel).forEach(c => {
+    const on = set.has(c.dataset[key]);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', on);
+  });
+  sync('#mf-cat-chips .type-chip', activeCats, 'cat');
+  sync('#mf-type-chips .type-chip', activeTypes, 'type');
+  sync('#mf-team-chips .type-chip', activeTeams, 'team');
+  sync('#mf-prod-chips .type-chip', activeProducts, 'product');
 }
 
 function updateMobileBadge() {
@@ -2447,7 +2522,7 @@ function clearAllMobileFilters() {
 
 function renderTeamChips() {
   document.getElementById('team-chips').innerHTML = TEAMS
-    .map(t => `<button class="type-chip ${activeTeams.has(t.id) ? 'active' : ''}" data-team="${t.id}" onclick="toggleTeam('${t.id}')"><span class="chip-dot"></span>${t.label}</button>`)
+    .map(t => `<button class="type-chip ${activeTeams.has(t.id) ? 'active' : ''}" aria-pressed="${activeTeams.has(t.id)}" data-team="${t.id}" onclick="toggleTeam('${t.id}')"><span class="chip-dot"></span>${t.label}</button>`)
     .join('');
 }
 
@@ -2455,14 +2530,16 @@ function toggleTeam(id) {
   if (activeTeams.has(id)) activeTeams.delete(id);
   else activeTeams.add(id);
   document.querySelectorAll('#team-chips .type-chip').forEach(c => {
-    c.classList.toggle('active', activeTeams.has(c.dataset.team));
+    const on = activeTeams.has(c.dataset.team);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', on);
   });
   updateTeamBtn(); updateTeamTags(); renderSections();
 }
 
 function renderProductChips() {
   document.getElementById('product-chips').innerHTML = PRODUCTS
-    .map(p => `<button class="type-chip ${activeProducts.has(p.id) ? 'active' : ''}" data-product="${p.id}" onclick="toggleProduct('${p.id}')"><span class="chip-dot"></span>${p.label}</button>`)
+    .map(p => `<button class="type-chip ${activeProducts.has(p.id) ? 'active' : ''}" aria-pressed="${activeProducts.has(p.id)}" data-product="${p.id}" onclick="toggleProduct('${p.id}')"><span class="chip-dot"></span>${p.label}</button>`)
     .join('');
 }
 
@@ -2470,7 +2547,9 @@ function toggleProduct(id) {
   if (activeProducts.has(id)) activeProducts.delete(id);
   else activeProducts.add(id);
   document.querySelectorAll('#product-chips .type-chip').forEach(c => {
-    c.classList.toggle('active', activeProducts.has(c.dataset.product));
+    const on = activeProducts.has(c.dataset.product);
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-pressed', on);
   });
   updateProductBtn(); updateProductTags(); renderSections();
 }
@@ -2562,24 +2641,25 @@ function renderSections() {
     sec.dataset.cat = grp.id;
     sec.dataset.grpKey = grpKey;
     sec.style.animationDelay = `${0.1 + gi * 0.06}s`;
+    const grpExpanded = !sec.classList.contains('grp-collapsed');
     sec.innerHTML = `
-      <div class="cat-header" onclick="toggleGroup(this)">
-        <div class="cat-icon ${grp.cls}">${grp.icon}</div>
+      <button type="button" class="cat-header" onclick="toggleGroup(this)" aria-expanded="${grpExpanded}">
+        <span class="cat-icon ${grp.cls}" aria-hidden="true">${grp.icon}</span>
         <span class="cat-name">${grp.label}</span>
         <span class="cat-count">${grp.links.length}</span>
-        <div class="grp-toggle"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      </div>
+        <span class="grp-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
       <div class="grp-content"><div>
       <div class="links-grid">
         ${grp.links.map(l => {
           const typeId = l._typeId;
           const catCls = l._cat ? l._cat.cls : 'op';
-          return `<a class="link-card" href="${l.url}" target="_blank" rel="noopener" data-type="${typeId}" data-link-id="${l.id}">
-            <div class="card-icon ${catCls}">${l.icon}</div>
+          return `<a class="link-card" href="${esc(l.url)}" target="_blank" rel="noopener" data-type="${typeId}" data-link-id="${l.id}">
+            <div class="card-icon ${catCls}">${esc(l.icon)}</div>
             <div class="card-body">
               <div class="card-title" title="${esc(l.title)}">${hl(l.title, q)}${l.isNew ? '<span class="new-badge">Novo</span>' : ''}</div>
               <div class="card-desc">${hl(l.desc, q)}</div>
-              ${l.team && l.team.length ? `<div class="card-teams">${l.team.map(t => `<span class="team-tag t-${t.toLowerCase()}">${t}</span>`).join('')}${l.product && l.product.length ? l.product.map(p => `<span class="product-tag p-${p.toLowerCase()}">${p}</span>`).join('') : ''}</div>` : l.product && l.product.length ? `<div class="card-teams">${l.product.map(p => `<span class="product-tag p-${p.toLowerCase()}">${p}</span>`).join('')}</div>` : ''}
+              ${l.team && l.team.length ? `<div class="card-teams">${l.team.map(t => `<span class="team-tag t-${esc(t.toLowerCase())}">${esc(t)}</span>`).join('')}${l.product && l.product.length ? l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('') : ''}</div>` : l.product && l.product.length ? `<div class="card-teams">${l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('')}</div>` : ''}
             </div>
             <svg class="card-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M4 16L16 4M9 4h7v7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2611,6 +2691,13 @@ function renderSections() {
       btn.style.display = 'none';
     }
   }
+  // Só anuncia contagem via aria-live quando há busca/filtro ativo — evita
+  // "N resultados" sendo lido no carregamento inicial e em renders passivos.
+  const live = document.getElementById('results-live');
+  const anyQuery = !!searchQuery || (activeCats.size + activeTypes.size + activeTeams.size + activeProducts.size) > 0;
+  if (live) live.textContent = !anyQuery
+    ? ''
+    : (total === 0 ? 'Nenhum resultado' : total + (total === 1 ? ' resultado' : ' resultados'));
   applyClickCounts();
   updateToggleAllIcon();
 }

@@ -12,14 +12,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#07090f;--surface:rgba(255,255,255,.045);--surf-h:rgba(255,255,255,.075);--border:rgba(255,255,255,.08);--bord-h:rgba(255,255,255,.16);--accent:#11a1cb;--accent2:#3bbfe0;--text:#e8ecf4;--text-2:rgba(232,236,244,.7);--muted:rgba(232,236,244,.4);--r:13px;--r-sm:9px;--r-lg:20px;--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:48px;--sp-12:56px;--topbar-h:64px;--page-max:1280px;--page-pad:clamp(24px,5vw,56px);--purple:#818cf8;--purple-bg:rgba(99,102,241,.08);--green:#34d399;--red:#f87171;--red-bg:rgba(248,113,113,.08);--yellow:#fbbf24;--topbar-bg:rgba(7,9,15,.78);--modal-bg:#0d111e;--table-header-bg:#0c1019;--shadow-color:rgba(0,0,0,.3);--invert-logo:0;--row-border:rgba(255,255,255,.06);--row-hover:rgba(255,255,255,.03);--bar-bg:rgba(255,255,255,.06);--scrollbar-thumb:rgba(255,255,255,.08);--toast-bg:rgba(15,20,40,.95);--toast-color:#e8ecf4;--c-sales:#3b82f6;--c-cs:#10b981;--c-product:#a855f7;--c-marketing:#fb923c;--c-people:#ec4899;--c-everyone:#64748b;--c-sales-text:#60a5fa;--c-cs-text:#34d399;--c-product-text:#c084fc;--c-marketing-text:#fb923c;--c-people-text:#f472b6;--c-everyone-text:#94a3b8;--c-prod-border:rgba(129,140,248,.35);--c-prod-text:rgba(129,140,248,.7);--text-on-accent:#fff;--text-on-light-accent:#111;--fs-xs:10px;--fs-sm:12px;--fs-base:14px;--fs-md:15px;--fs-section:11px;--accent-8:rgba(17,161,203,.08);--accent-35:rgba(17,161,203,.35);--indigo-8:rgba(99,102,241,.08);--indigo-15:rgba(99,102,241,.15);--indigo-18:rgba(99,102,241,.18);--indigo-35:rgba(99,102,241,.35);--dropdown-divider:var(--border)}
-[data-theme="light"]{--bg:#f4f5f7;--surface:rgba(0,0,0,.04);--surf-h:rgba(0,0,0,.07);--border:rgba(0,0,0,.1);--bord-h:rgba(0,0,0,.18);--accent:#0d8aab;--accent2:#0a7a99;--text:#1b262f;--text-2:rgba(27,38,47,.72);--muted:rgba(27,38,47,.45);--purple:#6366f1;--purple-bg:rgba(99,102,241,.1);--green:#059669;--red:#dc2626;--red-bg:rgba(220,38,38,.08);--yellow:#d97706;--topbar-bg:rgba(244,245,247,.85);--modal-bg:#ffffff;--table-header-bg:#f0f1f3;--shadow-color:rgba(0,0,0,.08);--invert-logo:1;--row-border:rgba(0,0,0,.08);--row-hover:rgba(0,0,0,.03);--bar-bg:rgba(0,0,0,.08);--scrollbar-thumb:rgba(0,0,0,.1);--toast-bg:rgba(255,255,255,.95);--toast-color:#1b262f}
+:root{--bg:#07090f;--surface:rgba(255,255,255,.045);--surf-h:rgba(255,255,255,.075);--border:rgba(255,255,255,.08);--bord-h:rgba(255,255,255,.16);--accent:#11a1cb;--accent2:#3bbfe0;--text:#e8ecf4;--text-2:rgba(232,236,244,.7);--muted:rgba(232,236,244,.62);--r:13px;--r-sm:9px;--r-lg:20px;--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:48px;--sp-12:56px;--topbar-h:64px;--page-max:1280px;--page-pad:clamp(24px,5vw,56px);--purple:#818cf8;--purple-bg:rgba(99,102,241,.08);--green:#34d399;--red:#f87171;--red-bg:rgba(248,113,113,.08);--yellow:#fbbf24;--topbar-bg:rgba(7,9,15,.78);--modal-bg:#0d111e;--table-header-bg:#0c1019;--shadow-color:rgba(0,0,0,.3);--invert-logo:0;--row-border:rgba(255,255,255,.06);--row-hover:rgba(255,255,255,.03);--bar-bg:rgba(255,255,255,.06);--scrollbar-thumb:rgba(255,255,255,.08);--toast-bg:rgba(15,20,40,.95);--toast-color:#e8ecf4;--c-sales:#3b82f6;--c-cs:#10b981;--c-product:#a855f7;--c-marketing:#fb923c;--c-people:#ec4899;--c-everyone:#64748b;--c-sales-text:#60a5fa;--c-cs-text:#34d399;--c-product-text:#c084fc;--c-marketing-text:#fb923c;--c-people-text:#f472b6;--c-everyone-text:#94a3b8;--c-prod-border:rgba(129,140,248,.35);--c-prod-text:rgba(129,140,248,.7);--text-on-accent:#fff;--text-on-light-accent:#111;--fs-xs:10px;--fs-sm:12px;--fs-base:14px;--fs-md:15px;--fs-section:11px;--accent-8:rgba(17,161,203,.08);--accent-35:rgba(17,161,203,.35);--indigo-8:rgba(99,102,241,.08);--indigo-15:rgba(99,102,241,.15);--indigo-18:rgba(99,102,241,.18);--indigo-35:rgba(99,102,241,.35)}
+[data-theme="light"]{--bg:#f4f5f7;--surface:rgba(0,0,0,.04);--surf-h:rgba(0,0,0,.07);--border:rgba(0,0,0,.1);--bord-h:rgba(0,0,0,.18);--accent:#0d8aab;--accent2:#0a7a99;--text:#1b262f;--text-2:rgba(27,38,47,.72);--muted:rgba(27,38,47,.66);--purple:#6366f1;--purple-bg:rgba(99,102,241,.1);--green:#059669;--red:#dc2626;--red-bg:rgba(220,38,38,.08);--yellow:#d97706;--topbar-bg:rgba(244,245,247,.85);--modal-bg:#ffffff;--table-header-bg:#f0f1f3;--shadow-color:rgba(0,0,0,.08);--invert-logo:1;--row-border:rgba(0,0,0,.08);--row-hover:rgba(0,0,0,.03);--bar-bg:rgba(0,0,0,.08);--scrollbar-thumb:rgba(0,0,0,.1);--toast-bg:rgba(255,255,255,.95);--toast-color:#1b262f}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:'Urbanist',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;font-family:inherit;border:none;background:none}
 input,select,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r-sm)}
+:focus:not(:focus-visible){outline:none}
+.crud-table th.sortable:focus-visible{outline-offset:-2px}
+.admin-dd-chip:focus-visible,.switch:focus-visible,.period-pill:focus-visible,.filter-chip:focus-visible{outline-offset:2px}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:3px}
@@ -61,6 +65,15 @@ input,select,textarea{font-family:inherit}
 
 /* MAIN */
 .admin-main{max-width:var(--page-max);margin:0 auto;padding:var(--sp-10) var(--page-pad) 96px}
+
+/* TABS */
+.admin-tabs{display:flex;gap:var(--sp-1);margin-bottom:var(--sp-8);border-bottom:1px solid var(--border);animation:fadeUp .4s ease both;overflow-x:auto}
+.admin-tab{appearance:none;-webkit-appearance:none;position:relative;height:44px;padding:0 var(--sp-4);background:none;border:none;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .18s;white-space:nowrap;margin-bottom:-1px;flex-shrink:0}
+.admin-tab:hover{color:var(--text)}
+.admin-tab[aria-selected="true"]{color:var(--purple)}
+.admin-tab[aria-selected="true"]::after{content:'';position:absolute;left:var(--sp-3);right:var(--sp-3);bottom:0;height:2px;background:var(--purple);border-radius:2px}
+.admin-tabpanel[hidden]{display:none}
+.admin-tabpanel>.section-header.mt:first-child{margin-top:0}
 
 /* PERIOD */
 .period-bar{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-8);animation:fadeUp .4s ease both;flex-wrap:wrap}
@@ -131,7 +144,7 @@ input,select,textarea{font-family:inherit}
 .admin-dd-clear{font-size:11px;font-weight:600;color:var(--purple);cursor:pointer;background:none;border:none;padding:0;opacity:0;pointer-events:none;transition:opacity .15s}
 .admin-dd-clear.visible{opacity:1;pointer-events:all}
 .admin-dd-chips{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
-.admin-dd-chip{display:flex;align-items:center;gap:5px;height:28px;padding:0 11px;border-radius:100px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none}
+.admin-dd-chip{appearance:none;-webkit-appearance:none;display:flex;align-items:center;gap:5px;height:28px;padding:0 11px;border-radius:100px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none}
 .admin-dd-chip:hover{border-color:var(--bord-h);color:var(--text);background:var(--surface)}
 .admin-dd-chip.active{background:var(--indigo-15);border-color:var(--indigo-35);color:var(--purple);font-weight:600}
 .admin-dd-chip .chip-check{width:12px;height:12px;border-radius:3px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
@@ -206,7 +219,7 @@ input,select,textarea{font-family:inherit}
 .form-check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);cursor:pointer}
 .form-check input[type="checkbox"]{accent-color:var(--purple);width:14px;height:14px}
 .form-switch-row{display:flex;align-items:center;gap:var(--sp-3);font-size:14px;color:var(--text-2)}
-.switch{position:relative;width:36px;height:20px;background:var(--surface);border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:all .2s}
+.switch{appearance:none;-webkit-appearance:none;padding:0;position:relative;width:36px;height:20px;background:var(--surface);border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:all .2s}
 .switch.on{background:var(--purple);border-color:var(--purple)}
 .switch::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text-on-accent);transition:transform .2s}
 .switch.on::after{transform:translateX(16px)}
@@ -313,21 +326,28 @@ input,select,textarea{font-family:inherit}
   <header class="topbar"><div class="topbar-inner">
     <a class="topbar-logo" href="index.html"><img src="logo.png" alt="HYPR"><div class="topbar-logo-divider"></div><span class="topbar-logo-text">Hub <em>Admin</em></span></a>
     <div class="topbar-right">
-      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema" aria-label="Alternar tema">
         <svg class="icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.3 13.3A7.5 7.5 0 116.7 2.7a5.5 5.5 0 0010.6 10.6z" stroke-linejoin="round"/></svg>
         <svg class="icon-sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="3.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke-linecap="round"/></svg>
       </button>
-      <a class="btn-back" href="index.html"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10H5M9 6l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Voltar ao Hub</span></a>
+      <a class="btn-back" href="index.html" aria-label="Voltar ao Hub"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 10H5M9 6l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Voltar ao Hub</span></a>
       <div class="user-avatar" id="user-avatar">?</div>
     </div>
   </div></header>
 
   <main class="admin-main">
+    <div class="admin-tabs" role="tablist" aria-label="Seções do painel">
+      <button class="admin-tab" role="tab" id="tab-analytics" aria-controls="panel-analytics" aria-selected="true" tabindex="0" onclick="switchTab('analytics')">Analytics</button>
+      <button class="admin-tab" role="tab" id="tab-cards" aria-controls="panel-cards" aria-selected="false" tabindex="-1" onclick="switchTab('cards')">Cards</button>
+      <button class="admin-tab" role="tab" id="tab-admins" aria-controls="panel-admins" aria-selected="false" tabindex="-1" onclick="switchTab('admins')">Admins</button>
+    </div>
+
+    <div class="admin-tabpanel" role="tabpanel" id="panel-analytics" aria-labelledby="tab-analytics" tabindex="0">
     <div class="period-bar">
-      <button class="period-pill" onclick="setPeriod(7,this)">7 dias</button>
-      <button class="period-pill active" onclick="setPeriod(30,this)">30 dias</button>
-      <button class="period-pill" onclick="setPeriod(90,this)">90 dias</button>
-      <button class="period-pill" onclick="setPeriod(0,this)">Tudo</button>
+      <button class="period-pill" aria-pressed="false" onclick="setPeriod(7,this)">7 dias</button>
+      <button class="period-pill active" aria-pressed="true" onclick="setPeriod(30,this)">30 dias</button>
+      <button class="period-pill" aria-pressed="false" onclick="setPeriod(90,this)">90 dias</button>
+      <button class="period-pill" aria-pressed="false" onclick="setPeriod(0,this)">Tudo</button>
     </div>
 
     <div class="user-filter-bar" id="user-filter-bar">
@@ -350,7 +370,7 @@ input,select,textarea{font-family:inherit}
     <div class="chart-row">
       <div class="chart-box full">
         <div class="chart-title"><span class="dot" style="background:var(--accent)"></span> Cliques <span class="dot" style="background:var(--purple);margin-left:8px"></span> Pageviews</div>
-        <div class="chart-canvas-wrap timeline"><canvas id="chart-timeline"></canvas></div>
+        <div class="chart-canvas-wrap timeline"><canvas id="chart-timeline" role="img" aria-label="Gráfico de cliques e pageviews ao longo do tempo"></canvas></div>
       </div>
     </div>
 
@@ -362,10 +382,12 @@ input,select,textarea{font-family:inherit}
 
     <div class="section-header">Breakdown</div>
     <div class="chart-row">
-      <div class="chart-box"><div class="chart-title">Por Área</div><div class="chart-canvas-wrap donut"><canvas id="chart-team"></canvas></div></div>
-      <div class="chart-box"><div class="chart-title">Por Categoria</div><div class="chart-canvas-wrap donut"><canvas id="chart-category"></canvas></div></div>
+      <div class="chart-box"><div class="chart-title">Por Área</div><div class="chart-canvas-wrap donut"><canvas id="chart-team" role="img" aria-label="Distribuição de cliques por área"></canvas></div></div>
+      <div class="chart-box"><div class="chart-title">Por Categoria</div><div class="chart-canvas-wrap donut"><canvas id="chart-category" role="img" aria-label="Distribuição de cliques por categoria"></canvas></div></div>
     </div>
+    </div><!-- /panel-analytics -->
 
+    <div class="admin-tabpanel" role="tabpanel" id="panel-cards" aria-labelledby="tab-cards" tabindex="0" hidden>
     <div class="section-header mt">Gerenciar Cards</div>
     <div style="animation:fadeUp .4s ease .18s both">
       <div class="crud-toolbar">
@@ -373,14 +395,17 @@ input,select,textarea{font-family:inherit}
         <button class="btn-primary" onclick="openModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>Novo Card</button>
       </div>
       <div class="crud-filters" id="crud-filters">
-        <div class="admin-filter-btn" id="fbtn-cat"><button class="admin-fbtn" onclick="toggleFilterDD('cat')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Categoria</button><div class="admin-dropdown" id="fdd-cat"><div class="admin-dd-header"><span>Categoria</span><button class="admin-dd-clear" onclick="clearFilter('cat')">Limpar</button></div><div class="admin-dd-chips" id="fchips-cat"></div></div></div>
-        <div class="admin-filter-btn" id="fbtn-desc"><button class="admin-fbtn" onclick="toggleFilterDD('desc')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Tipo</button><div class="admin-dropdown" id="fdd-desc"><div class="admin-dd-header"><span>Tipo</span><button class="admin-dd-clear" onclick="clearFilter('desc')">Limpar</button></div><div class="admin-dd-chips" id="fchips-desc"></div></div></div>
-        <div class="admin-filter-btn" id="fbtn-area"><button class="admin-fbtn" onclick="toggleFilterDD('area')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Área</button><div class="admin-dropdown" id="fdd-area"><div class="admin-dd-header"><span>Área</span><button class="admin-dd-clear" onclick="clearFilter('area')">Limpar</button></div><div class="admin-dd-chips" id="fchips-area"></div></div></div>
-        <div class="admin-filter-btn" id="fbtn-quick"><button class="admin-fbtn" onclick="toggleFilterDD('quick')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Quick</button><div class="admin-dropdown" id="fdd-quick"><div class="admin-dd-header"><span>Quick Access</span><button class="admin-dd-clear" onclick="clearFilter('quick')">Limpar</button></div><div class="admin-dd-chips" id="fchips-quick"><span class="admin-dd-chip" data-val="yes" onclick="toggleDDChip(this)"><span class="chip-check"></span>⚡ Sim</span><span class="admin-dd-chip" data-val="no" onclick="toggleDDChip(this)"><span class="chip-check"></span>Não</span></div></div></div>
+        <div class="admin-filter-btn" id="fbtn-cat"><button class="admin-fbtn" aria-haspopup="true" aria-expanded="false" aria-controls="fdd-cat" onclick="toggleFilterDD('cat')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Categoria</button><div class="admin-dropdown" id="fdd-cat"><div class="admin-dd-header"><span>Categoria</span><button class="admin-dd-clear" onclick="clearFilter('cat')">Limpar</button></div><div class="admin-dd-chips" id="fchips-cat"></div></div></div>
+        <div class="admin-filter-btn" id="fbtn-desc"><button class="admin-fbtn" aria-haspopup="true" aria-expanded="false" aria-controls="fdd-desc" onclick="toggleFilterDD('desc')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Tipo</button><div class="admin-dropdown" id="fdd-desc"><div class="admin-dd-header"><span>Tipo</span><button class="admin-dd-clear" onclick="clearFilter('desc')">Limpar</button></div><div class="admin-dd-chips" id="fchips-desc"></div></div></div>
+        <div class="admin-filter-btn" id="fbtn-area"><button class="admin-fbtn" aria-haspopup="true" aria-expanded="false" aria-controls="fdd-area" onclick="toggleFilterDD('area')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Área</button><div class="admin-dropdown" id="fdd-area"><div class="admin-dd-header"><span>Área</span><button class="admin-dd-clear" onclick="clearFilter('area')">Limpar</button></div><div class="admin-dd-chips" id="fchips-area"></div></div></div>
+        <div class="admin-filter-btn" id="fbtn-quick"><button class="admin-fbtn" aria-haspopup="true" aria-expanded="false" aria-controls="fdd-quick" onclick="toggleFilterDD('quick')"><svg class="admin-fbtn-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4.5l3 3 3-3"/></svg>Quick</button><div class="admin-dropdown" id="fdd-quick"><div class="admin-dd-header"><span>Quick Access</span><button class="admin-dd-clear" onclick="clearFilter('quick')">Limpar</button></div><div class="admin-dd-chips" id="fchips-quick"><button type="button" class="admin-dd-chip" data-val="yes" aria-pressed="false" onclick="toggleDDChip(this)"><span class="chip-check"></span>⚡ Sim</button><button type="button" class="admin-dd-chip" data-val="no" aria-pressed="false" onclick="toggleDDChip(this)"><span class="chip-check"></span>Não</button></div></div></div>
       </div>
-      <div class="crud-scroll"><table class="crud-table"><thead><tr><th class="sortable" data-sort="is_active" onclick="toggleSort(this)">Status</th><th class="sortable" data-sort="category" onclick="toggleSort(this)">Cat</th><th class="sortable" data-sort="title" onclick="toggleSort(this)">Título</th><th class="sortable" data-sort="description" onclick="toggleSort(this)">Descrição</th><th>Áreas</th><th class="sortable" data-sort="sort_order" data-type="num" onclick="toggleSort(this)">Ordem</th><th></th></tr></thead><tbody id="crud-body"></tbody></table></div>
+      <div class="crud-scroll"><table class="crud-table"><thead><tr><th class="sortable" data-sort="is_active" tabindex="0" aria-sort="none" onclick="toggleSort(this)" onkeydown="sortKey(event,this)">Status</th><th class="sortable" data-sort="category" tabindex="0" aria-sort="none" onclick="toggleSort(this)" onkeydown="sortKey(event,this)">Cat</th><th class="sortable" data-sort="title" tabindex="0" aria-sort="none" onclick="toggleSort(this)" onkeydown="sortKey(event,this)">Título</th><th class="sortable" data-sort="description" tabindex="0" aria-sort="none" onclick="toggleSort(this)" onkeydown="sortKey(event,this)">Descrição</th><th>Áreas</th><th class="sortable" data-sort="sort_order" data-type="num" tabindex="0" aria-sort="none" onclick="toggleSort(this)" onkeydown="sortKey(event,this)">Ordem</th><th></th></tr></thead><tbody id="crud-body"></tbody></table></div>
     </div>
 
+    </div><!-- /panel-cards -->
+
+    <div class="admin-tabpanel" role="tabpanel" id="panel-admins" aria-labelledby="tab-admins" tabindex="0" hidden>
     <div class="section-header mt">Administradores</div>
     <div style="animation:fadeUp .4s ease .22s both">
       <div class="admins-grid" id="admins-grid"></div>
@@ -389,34 +414,35 @@ input,select,textarea{font-family:inherit}
         <button class="btn-primary" id="btn-add-admin" onclick="addAdmin()" style="padding:0 14px"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>Adicionar</button>
       </div>
     </div>
+    </div><!-- /panel-admins -->
   </main>
 </div>
 
-<div class="modal-overlay" id="modal-overlay"><div class="modal">
+<div class="modal-overlay" id="modal-overlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-title" id="modal-title">Novo Card</div>
   <input type="hidden" id="edit-id">
-  <div class="form-group"><label class="form-label">Categoria</label><select class="form-select" id="f-category" onchange="onCategoryChange()"><option value="op">Operacional</option><option value="da">Dashboards & Analytics</option><option value="fe">Ferramentas HYPR</option><option value="rc">Recursos</option></select></div>
-  <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="f-title" placeholder="Ex: Pipeline Base"><div class="field-error-msg"></div></div>
-  <div class="form-group"><label class="form-label">Ícone (emoji)</label>
+  <div class="form-group"><label class="form-label" for="f-category">Categoria</label><select class="form-select" id="f-category" onchange="onCategoryChange()"><option value="op">Operacional</option><option value="da">Dashboards & Analytics</option><option value="fe">Ferramentas HYPR</option><option value="rc">Recursos</option></select></div>
+  <div class="form-group"><label class="form-label" for="f-title">Título</label><input class="form-input" id="f-title" placeholder="Ex: Pipeline Base"><div class="field-error-msg"></div></div>
+  <div class="form-group"><label class="form-label" for="f-icon">Ícone (emoji)</label>
     <div class="emoji-input-wrap">
       <input class="emoji-input" id="f-icon" placeholder="📊" maxlength="4" autocomplete="off" autocorrect="off" spellcheck="false" data-1p-ignore data-lpignore="true">
       <span class="emoji-hint">Clique no campo e use<br>Cmd+Ctrl+Espaço (Mac) ou Win+. (Win)</span>
     </div>
     <div class="field-error-msg"></div>
   </div>
-  <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="f-desc" onchange="toggleCustomDesc()"></select><input class="form-input" id="f-desc-custom" placeholder="Ex: meuapp.hypr.mobi" style="display:none;margin-top:var(--sp-2)"><div class="field-error-msg"></div></div>
-  <div class="form-group"><label class="form-label">URL</label><input class="form-input" id="f-url" placeholder="https://..."><div class="field-error-msg"></div></div>
-  <div class="form-group"><label class="form-label">Áreas</label><div class="form-checkbox-row" id="f-teams"></div><div class="field-error-msg"></div></div>
-  <div class="form-group"><label class="form-label">Produto</label><div class="form-checkbox-row" id="f-product"></div></div>
-  <div class="form-group" id="keywords-group"><label class="form-label">Palavras-chave</label><div class="kw-wrap" id="f-keywords" onclick="this.querySelector('.kw-input')?.focus()"><input class="kw-input" id="kw-input" placeholder="Digite e pressione Enter..." autocomplete="off"></div><div class="kw-hint">Termos invisíveis para melhorar a busca. Ex: férias, descanso, folga</div><div class="field-error-msg"></div></div>
+  <div class="form-group"><label class="form-label" for="f-desc">Tipo</label><select class="form-select" id="f-desc" onchange="toggleCustomDesc()"></select><input class="form-input" id="f-desc-custom" placeholder="Ex: meuapp.hypr.mobi" style="display:none;margin-top:var(--sp-2)" aria-label="Tipo customizado"><div class="field-error-msg"></div></div>
+  <div class="form-group"><label class="form-label" for="f-url">URL</label><input class="form-input" id="f-url" placeholder="https://..."><div class="field-error-msg"></div></div>
+  <div class="form-group"><label class="form-label" id="f-teams-label">Áreas</label><div class="form-checkbox-row" id="f-teams" role="group" aria-labelledby="f-teams-label"></div><div class="field-error-msg"></div></div>
+  <div class="form-group"><label class="form-label" id="f-product-label">Produto</label><div class="form-checkbox-row" id="f-product" role="group" aria-labelledby="f-product-label"></div></div>
+  <div class="form-group" id="keywords-group"><label class="form-label" for="kw-input">Palavras-chave</label><div class="kw-wrap" id="f-keywords" onclick="this.querySelector('.kw-input')?.focus()"><input class="kw-input" id="kw-input" placeholder="Digite e pressione Enter..." autocomplete="off"></div><div class="kw-hint">Termos invisíveis para melhorar a busca. Ex: férias, descanso, folga</div><div class="field-error-msg"></div></div>
   <div class="form-group" id="sort-group"><label class="form-label">Ordem na Categoria</label><div class="sort-panel" id="sort-panel"><div class="sort-panel-header"><span id="sort-panel-cat">—</span><span class="sort-panel-pos" id="sort-panel-pos"></span></div><div class="sort-list" id="sort-list"></div></div><input type="hidden" id="f-sort" value="0"><div class="sort-panel-hint">Use as setas para reordenar dentro da categoria</div><div class="field-error-msg"></div></div>
-  <div class="form-group"><div class="form-switch-row"><span>Ativo</span><div class="switch on" id="f-active" onclick="this.classList.toggle('on')"></div></div></div>
-  <div class="form-group"><div class="form-switch-row"><span>⚡ Acesso Rápido</span><div class="switch" id="f-quick" onclick="toggleQuickAccess(this)"></div><span id="f-quick-hint" style="font-size:11px;color:var(--muted);margin-left:8px"></span></div></div>
-  <div class="form-group" id="qa-order-group" style="display:none"><label class="form-label">Ordem no Acesso Rápido</label><input class="form-input" id="f-qa-order" type="number" value="0" min="0" style="width:80px"><div class="field-hint" style="font-size:11px;color:var(--muted);margin-top:4px">Menor número = aparece primeiro</div></div>
+  <div class="form-group"><div class="form-switch-row"><span id="f-active-label">Ativo</span><button type="button" class="switch on" id="f-active" role="switch" aria-checked="true" aria-labelledby="f-active-label" onclick="this.classList.toggle('on');this.setAttribute('aria-checked',this.classList.contains('on'))"></button></div></div>
+  <div class="form-group"><div class="form-switch-row"><span id="f-quick-label">⚡ Acesso Rápido</span><button type="button" class="switch" id="f-quick" role="switch" aria-checked="false" aria-labelledby="f-quick-label" onclick="toggleQuickAccess(this)"></button><span id="f-quick-hint" style="font-size:11px;color:var(--muted);margin-left:8px"></span></div></div>
+  <div class="form-group" id="qa-order-group" style="display:none"><label class="form-label" for="f-qa-order">Ordem no Acesso Rápido</label><input class="form-input" id="f-qa-order" type="number" value="0" min="0" style="width:80px"><div class="field-hint" style="font-size:11px;color:var(--muted);margin-top:4px">Menor número = aparece primeiro</div></div>
   <div class="modal-footer"><button class="btn-cancel" onclick="closeModal()">Cancelar</button><button class="btn-save" id="btn-save" onclick="saveCard()">Salvar</button></div>
 </div></div>
 
-<div class="confirm-overlay" id="confirm-overlay"><div class="confirm-box"><p id="confirm-msg">Excluir este card?</p><div class="confirm-actions"><button class="btn-cancel" onclick="closeConfirm()">Cancelar</button><button class="btn-confirm-del" id="btn-confirm-del">Excluir</button></div></div></div>
+<div class="confirm-overlay" id="confirm-overlay"><div class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="confirm-msg"><p id="confirm-msg">Excluir este card?</p><div class="confirm-actions"><button class="btn-cancel" onclick="closeConfirm()">Cancelar</button><button class="btn-confirm-del" id="btn-confirm-del">Excluir</button></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -437,6 +463,7 @@ let currentDays=30,allCards=[],timelineChart=null,teamChart=null,categoryChart=n
 const MAX_QUICK=6;
 let _quickCount=0,_hasQaOrder=false,_hasKeywords=false;
 let _sortCol=null,_sortDir='asc';
+let _lastFocused=null,_confirmAction=null,_confirmLastFocused=null;
 // Cross-filter state
 let filters={email:null,url:null,team:null,category:null};
 
@@ -450,12 +477,39 @@ function hideLoading(){const e=document.getElementById('loading-screen');e.style
 function relTime(ts){if(!ts)return'—';const d=Date.now()-new Date(ts).getTime(),m=Math.floor(d/6e4);if(m<1)return'agora';if(m<60)return m+'min atrás';const h=Math.floor(m/60);if(h<24)return h+'h atrás';const dy=Math.floor(h/24);if(dy<7)return dy+'d atrás';return new Date(ts).toLocaleDateString('pt-BR')}
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-function setPeriod(d,b){currentDays=d;document.querySelectorAll('.period-pill').forEach(p=>p.classList.remove('active'));b.classList.add('active');loadAnalytics()}
+function setPeriod(d,b){currentDays=d;document.querySelectorAll('.period-pill').forEach(p=>{p.classList.remove('active');p.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');loadAnalytics()}
+
+// ── TABS ──
+const TAB_NAMES=['analytics','cards','admins'];
+function switchTab(name){
+  TAB_NAMES.forEach(t=>{
+    const tab=document.getElementById('tab-'+t),panel=document.getElementById('panel-'+t);
+    const sel=t===name;
+    tab.setAttribute('aria-selected',sel?'true':'false');
+    tab.tabIndex=sel?0:-1;            // roving tabindex
+    panel.hidden=!sel;
+  });
+  // Charts sized to 0 if (re)rendered while their panel was display:none — resize on return
+  if(name==='analytics'){[timelineChart,teamChart,categoryChart].forEach(c=>{if(c)c.resize()})}
+}
+// Navegação por teclado no tablist (setas/Home/End) — padrão WAI-ARIA tabs
+document.querySelector('.admin-tabs')?.addEventListener('keydown',e=>{
+  const keys={ArrowRight:1,ArrowLeft:-1,Home:'first',End:'last'};
+  if(!(e.key in keys))return;
+  e.preventDefault();
+  const cur=TAB_NAMES.indexOf(document.querySelector('.admin-tab[aria-selected="true"]')?.id.replace('tab-',''));
+  let i;
+  if(keys[e.key]==='first')i=0;
+  else if(keys[e.key]==='last')i=TAB_NAMES.length-1;
+  else i=(cur+keys[e.key]+TAB_NAMES.length)%TAB_NAMES.length;
+  switchTab(TAB_NAMES[i]);
+  document.getElementById('tab-'+TAB_NAMES[i]).focus();
+});
 
 Chart.defaults.font.family='Urbanist';
 function isLightTheme(){return document.documentElement.getAttribute('data-theme')==='light'}
 function chartBg(){return isLightTheme()?'#f4f5f7':'#07090f'}
-function chartTextColor(){return isLightTheme()?'rgba(27,38,47,.65)':'rgba(232,236,244,0.4)'}
+function chartTextColor(){return isLightTheme()?'rgba(27,38,47,.66)':'rgba(232,236,244,0.62)'}
 function chartTooltipBg(){return isLightTheme()?'#ffffff':'#0d111e'}
 function chartTooltipBorder(){return isLightTheme()?'rgba(0,0,0,.1)':'rgba(255,255,255,.1)'}
 Chart.defaults.color=chartTextColor();
@@ -511,7 +565,11 @@ async function loadAnalytics(){
 }
 
 function renderTimeline(data,g){
-  if(timelineChart)timelineChart.destroy();if(!data?.length)return;
+  if(timelineChart){timelineChart.destroy();timelineChart=null}
+  const _tlEl=document.getElementById('chart-timeline'),_tlWrap=_tlEl.parentElement,_tlMsg=_tlWrap.querySelector('.chart-empty');
+  if(!data?.length){_tlEl.style.display='none';_tlEl.setAttribute('aria-label','Gráfico de cliques e pageviews ao longo do tempo — sem dados');if(!_tlMsg){_tlWrap.insertAdjacentHTML('beforeend','<div class="chart-empty" style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Sem dados</div>')}else _tlMsg.style.display='';return}
+  _tlEl.style.display='';if(_tlMsg)_tlMsg.style.display='none';
+  _tlEl.setAttribute('aria-label',`Gráfico de cliques e pageviews ao longo do tempo, ${data.length} períodos`);
   const labels=data.map(d=>{const dt=new Date(d.period);if(g==='day')return dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});if(g==='week')return'Sem '+dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});return dt.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})});
   timelineChart=new Chart(document.getElementById('chart-timeline'),{type:'line',data:{labels,datasets:[{label:'Cliques',data:data.map(d=>d.click_count),borderColor:'#11a1cb',backgroundColor:'rgba(17,161,203,.08)',fill:true,tension:.35,pointRadius:0,pointHoverRadius:5,borderWidth:2},{label:'Pageviews',data:data.map(d=>d.view_count),borderColor:'#818cf8',backgroundColor:'rgba(129,140,248,.06)',fill:true,tension:.35,pointRadius:0,pointHoverRadius:5,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:getTT()},scales:{x:{grid:{color:isLightTheme()?'rgba(0,0,0,.12)':'rgba(255,255,255,.06)'},border:{display:false},ticks:{maxRotation:0,maxTicksLimit:10,font:{size:11},color:chartTextColor()}},y:{grid:{color:isLightTheme()?'rgba(0,0,0,.12)':'rgba(255,255,255,.06)'},border:{display:false},ticks:{font:{size:11},color:chartTextColor()},beginAtZero:true}}}});
 }
@@ -522,7 +580,7 @@ function renderTopCards(data){
   const mx=data[0].click_count||1;
   tb.innerHTML=data.map((d,i)=>{
     const active=filters.url&&RTRIM(filters.url)==RTRIM(d.link_url);
-    return `<tr><td><span class="rank">${i+1}</span></td><td class="title-cell clickable ${active?'is-filtered':''}" title="Clique para filtrar" onclick="toggleFilter('url','${esc(d.link_url)}')">${esc(d.link_title)}</td><td style="width:40%"><div class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${(d.click_count/mx*100).toFixed(1)}%"></div></div><span class="pct">${d.click_count}</span></div></td></tr>`;
+    return `<tr><td><span class="rank">${i+1}</span></td><td class="title-cell clickable ${active?'is-filtered':''}" title="Clique para filtrar" onclick="toggleFilter('url','${esc(d.link_url)}')">${esc(d.link_title)}</td><td style="width:40%"><div class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${(d.click_count/mx*100).toFixed(1)}%"></div></div><span class="pct">${fmt(d.click_count)}</span></div></td></tr>`;
   }).join('');
 }
 function RTRIM(s){return(s||'').replace(/\/$/,'')}
@@ -532,7 +590,7 @@ function renderTopUsers(data){
   if(!data?.length){tb.innerHTML='<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:20px">Sem dados</td></tr>';return}
   tb.innerHTML=data.map((d,i)=>{
     const active=filters.email===d.user_email;
-    return `<tr><td><span class="rank">${i+1}</span></td><td class="email-cell clickable ${active?'is-filtered':''}" title="Clique para filtrar" onclick="toggleFilter('email','${esc(d.user_email)}')">${esc(d.user_email?.replace('@hypr.mobi',''))}</td><td style="font-weight:600">${d.click_count}</td><td class="ts-cell">${relTime(d.last_active)}</td></tr>`;
+    return `<tr><td><span class="rank">${i+1}</span></td><td class="email-cell clickable ${active?'is-filtered':''}" title="Clique para filtrar" onclick="toggleFilter('email','${esc(d.user_email)}')">${esc(d.user_email?.replace('@hypr.mobi',''))}</td><td style="font-weight:600">${fmt(d.click_count)}</td><td class="ts-cell">${relTime(d.last_active)}</td></tr>`;
   }).join('');
 }
 
@@ -541,21 +599,23 @@ function renderTeamChart(data){
   _teamData=data||[];
   if(teamChart)teamChart.destroy();teamChart=null;
   var el=document.getElementById('chart-team'),wrap=el.parentElement,msg=wrap.querySelector('.chart-empty');
-  if(!data?.length){el.style.display='none';if(!msg){wrap.insertAdjacentHTML('beforeend','<div class="chart-empty" style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Sem dados</div>')}else msg.style.display='';return}
+  if(!data?.length){el.style.display='none';el.setAttribute('aria-label','Distribuição de cliques por área — sem dados');if(!msg){wrap.insertAdjacentHTML('beforeend','<div class="chart-empty" style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Sem dados</div>')}else msg.style.display='';return}
   el.style.display='';if(msg)msg.style.display='none';
+  el.setAttribute('aria-label',`Distribuição de cliques por área (${data.length} áreas)`);
   teamChart=new Chart(el,{type:'doughnut',data:{labels:data.map(d=>d.team),datasets:[{data:data.map(d=>d.click_count),backgroundColor:data.map(d=>TEAM_COLORS[d.team]||'#64748b'),borderColor:chartBg(),borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:getDL(),tooltip:getTT()},onClick(e,els){if(!els.length)return;const team=_teamData[els[0].index]?.team;if(team)toggleFilter('team',team)}}});
 }
 function renderCatChart(data){
   _catData=data||[];
   if(categoryChart)categoryChart.destroy();categoryChart=null;
   var el=document.getElementById('chart-category'),wrap=el.parentElement,msg=wrap.querySelector('.chart-empty');
-  if(!data?.length){el.style.display='none';if(!msg){wrap.insertAdjacentHTML('beforeend','<div class="chart-empty" style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Sem dados</div>')}else msg.style.display='';return}
+  if(!data?.length){el.style.display='none';el.setAttribute('aria-label','Distribuição de cliques por categoria — sem dados');if(!msg){wrap.insertAdjacentHTML('beforeend','<div class="chart-empty" style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Sem dados</div>')}else msg.style.display='';return}
   el.style.display='';if(msg)msg.style.display='none';
+  el.setAttribute('aria-label',`Distribuição de cliques por categoria (${data.length} categorias)`);
   categoryChart=new Chart(el,{type:'doughnut',data:{labels:data.map(d=>CAT_LABELS[d.category]||d.category),datasets:[{data:data.map(d=>d.click_count),backgroundColor:data.map(d=>CAT_COLORS[d.category]||'#64748b'),borderColor:chartBg(),borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:getDL(),tooltip:getTT()},onClick(e,els){if(!els.length)return;const cat=_catData[els[0].index]?.category;if(cat)toggleFilter('category',cat)}}});
 }
 
 // CRUD
-async function loadCards(){try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?select=*&order=category.asc,sort_order.asc,title.asc`,{headers:sbH()});if(!r.ok)throw 0;allCards=await r.json();_quickCount=allCards.filter(c=>c.is_quick_access).length;_hasQaOrder=allCards.length>0&&'qa_order' in allCards[0];_hasKeywords=allCards.length>0&&'keywords' in allCards[0];populateDescOptions();populateFilterOptions();applyFilters()}catch(e){console.error(e);toast('Erro ao carregar cards')}}
+async function loadCards(){try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?select=*&order=category.asc,sort_order.asc,title.asc`,{headers:sbH()});if(!r.ok)throw 0;allCards=await r.json();_quickCount=allCards.filter(c=>c.is_quick_access).length;_hasQaOrder=allCards.length===0||('qa_order' in allCards[0]);_hasKeywords=allCards.length===0||('keywords' in allCards[0]);populateDescOptions();populateFilterOptions();applyFilters()}catch(e){console.error(e);toast('Erro ao carregar cards')}}
 
 function populateDescOptions(){
   const descriptions=new Set(allCards.map(c=>c.description).filter(Boolean));
@@ -573,21 +633,24 @@ function populateFilterOptions(){
   const cats=new Set(),descs=new Set(),areas=new Set();
   allCards.forEach(c=>{if(c.category)cats.add(c.category);if(c.description)descs.add(c.description);(c.teams||[]).forEach(t=>areas.add(t))});
   const prevCat=getActiveDDVals('cat'),prevDesc=getActiveDDVals('desc'),prevArea=getActiveDDVals('area');
-  document.getElementById('fchips-cat').innerHTML=[...cats].sort().map(c=>`<span class="admin-dd-chip${prevCat.has(c)?' active':''}" data-val="${c}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${CAT_LABELS[c]||c}</span>`).join('');
-  document.getElementById('fchips-desc').innerHTML=[...descs].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(d=>`<span class="admin-dd-chip${prevDesc.has(d)?' active':''}" data-val="${esc(d)}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${esc(d)}</span>`).join('');
-  document.getElementById('fchips-area').innerHTML=[...areas].sort().map(a=>`<span class="admin-dd-chip${prevArea.has(a)?' active':''}" data-val="${a}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${a}</span>`).join('');
+  document.getElementById('fchips-cat').innerHTML=[...cats].sort().map(c=>`<button type="button" class="admin-dd-chip${prevCat.has(c)?' active':''}" data-val="${c}" aria-pressed="${prevCat.has(c)}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${CAT_LABELS[c]||c}</button>`).join('');
+  document.getElementById('fchips-desc').innerHTML=[...descs].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(d=>`<button type="button" class="admin-dd-chip${prevDesc.has(d)?' active':''}" data-val="${esc(d)}" aria-pressed="${prevDesc.has(d)}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${esc(d)}</button>`).join('');
+  document.getElementById('fchips-area').innerHTML=[...areas].sort().map(a=>`<button type="button" class="admin-dd-chip${prevArea.has(a)?' active':''}" data-val="${a}" aria-pressed="${prevArea.has(a)}" onclick="toggleDDChip(this)"><span class="chip-check"></span>${a}</button>`).join('');
   updateAllFilterBtns();
 }
 function getActiveDDVals(key){return new Set([...document.querySelectorAll(`#fchips-${key} .admin-dd-chip.active`)].map(c=>c.dataset.val))}
-function toggleDDChip(el){el.classList.toggle('active');updateFilterBtn(el.closest('.admin-filter-btn'));applyFilters()}
+function toggleDDChip(el){el.classList.toggle('active');el.setAttribute('aria-pressed',el.classList.contains('active'));updateFilterBtn(el.closest('.admin-filter-btn'));applyFilters()}
 function toggleFilterDD(key){
   const dd=document.getElementById('fdd-'+key);const btn=dd.previousElementSibling;
   const wasOpen=dd.classList.contains('open');
-  document.querySelectorAll('.admin-dropdown.open').forEach(d=>{d.classList.remove('open');d.previousElementSibling.classList.remove('open')});
-  if(!wasOpen){dd.classList.add('open');btn.classList.add('open')}
+  closeAllFilterDD();
+  if(!wasOpen){dd.classList.add('open');btn.classList.add('open');btn.setAttribute('aria-expanded','true')}
+}
+function closeAllFilterDD(){
+  document.querySelectorAll('.admin-dropdown.open').forEach(d=>{d.classList.remove('open');const b=d.previousElementSibling;b.classList.remove('open');b.setAttribute('aria-expanded','false')});
 }
 function clearFilter(key){
-  document.querySelectorAll(`#fchips-${key} .admin-dd-chip.active`).forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll(`#fchips-${key} .admin-dd-chip.active`).forEach(c=>{c.classList.remove('active');c.setAttribute('aria-pressed','false')});
   updateFilterBtn(document.getElementById('fbtn-'+key));applyFilters();
 }
 function updateFilterBtn(container){
@@ -602,15 +665,17 @@ function updateFilterBtn(container){
 }
 function updateAllFilterBtns(){document.querySelectorAll('.admin-filter-btn').forEach(updateFilterBtn)}
 // Close dropdowns on outside click
-document.addEventListener('click',e=>{if(!e.target.closest('.admin-filter-btn')){document.querySelectorAll('.admin-dropdown.open').forEach(d=>{d.classList.remove('open');d.previousElementSibling.classList.remove('open')})}});
+document.addEventListener('click',e=>{if(!e.target.closest('.admin-filter-btn')){closeAllFilterDD()}});
 
 function toggleSort(th){
   const col=th.dataset.sort;
   if(_sortCol===col){_sortDir=_sortDir==='asc'?'desc':'asc'}else{_sortCol=col;_sortDir='asc'}
-  document.querySelectorAll('.crud-table th.sortable').forEach(h=>{h.classList.remove('asc','desc')});
+  document.querySelectorAll('.crud-table th.sortable').forEach(h=>{h.classList.remove('asc','desc');h.setAttribute('aria-sort','none')});
   th.classList.add(_sortDir);
+  th.setAttribute('aria-sort',_sortDir==='asc'?'ascending':'descending');
   applyFilters();
 }
+function sortKey(e,th){if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();toggleSort(th)}}
 
 function applyFilters(){
   const q=document.getElementById('crud-search').value.trim().toLowerCase();
@@ -648,9 +713,9 @@ function renderFilteredTable(ls){
     <td><span class="cat-badge ${c.category}">${c.category}</span></td>
     <td title="${esc(c.title)}">${esc(c.icon)} ${esc(c.title)}${c.is_quick_access?'<span class="quick-badge">⚡ Quick</span>':''}</td>
     <td title="${esc(c.description)}">${esc(c.description)}</td>
-    <td><div class="team-tags">${(c.teams||[]).map(t=>`<span class="team-mini t-${t.toLowerCase()}">${esc(t)}</span>`).join('')}${(c.product||[]).map(p=>`<span class="product-mini p-${p.toLowerCase()}">${esc(p)}</span>`).join('')}</div></td>
+    <td><div class="team-tags">${(c.teams||[]).map(t=>`<span class="team-mini t-${t.toLowerCase()}">${esc(t)}</span>`).join('')}${(c.product||[]).map(p=>`<span class="product-mini">${esc(p)}</span>`).join('')}</div></td>
     <td style="text-align:center;color:var(--muted)">${c.sort_order??''}</td>
-    <td><div class="crud-actions"><button class="btn-icon edit" title="Editar" onclick="editCard(${c.id})"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11.5 1.5l3 3L5 14H2v-3z" stroke-linejoin="round"/><path d="M9.5 3.5l3 3" stroke-linecap="round"/></svg></button><button class="btn-icon del" title="Excluir" onclick="confirmDelete(${c.id})"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M5.3 4V2.7a.7.7 0 01.7-.7h4a.7.7 0 01.7.7V4M6.5 7v4M9.5 7v4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 4l.7 9.3a1 1 0 001 .7h5.6a1 1 0 001-.7l.7-9.3" stroke-linejoin="round"/></svg></button></div></td></tr>`).join('');
+    <td><div class="crud-actions"><button class="btn-icon edit" title="Editar" aria-label="Editar ${esc(c.title)}" onclick="editCard(${c.id})"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11.5 1.5l3 3L5 14H2v-3z" stroke-linejoin="round"/><path d="M9.5 3.5l3 3" stroke-linecap="round"/></svg></button><button class="btn-icon del" title="Excluir" aria-label="Excluir ${esc(c.title)}" onclick="confirmDelete(${c.id})"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M5.3 4V2.7a.7.7 0 01.7-.7h4a.7.7 0 01.7.7V4M6.5 7v4M9.5 7v4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 4l.7 9.3a1 1 0 001 .7h5.6a1 1 0 001-.7l.7-9.3" stroke-linejoin="round"/></svg></button></div></td></tr>`).join('');
 }
 
 // MODAL
@@ -673,7 +738,7 @@ function renderKeywordTags(){
   _keywords.forEach((kw,i)=>{
     const tag=document.createElement('span');
     tag.className='kw-tag';
-    tag.innerHTML=`${esc(kw)}<button type="button" onclick="removeKeyword(${i})" title="Remover"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/></svg></button>`;
+    tag.innerHTML=`${esc(kw)}<button type="button" onclick="removeKeyword(${i})" title="Remover" aria-label="Remover palavra-chave ${esc(kw)}"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/></svg></button>`;
     wrap.insertBefore(tag,inp);
   });
 }
@@ -693,8 +758,13 @@ function removeKeyword(i){
 (function(){
   const inp=document.getElementById('kw-input');
   inp.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===','||e.key==='Tab'){
+    if(e.key==='Enter'||e.key===','){
       e.preventDefault();
+      const v=inp.value.replace(/,/g,'').trim();
+      if(v){addKeyword(v);inp.value=''}
+    } else if(e.key==='Tab'){
+      // Tab commita a keyword pendente mas NUNCA dá preventDefault, pra o foco
+      // sempre poder sair do campo (evita keyboard trap dentro do focus-trap do modal).
       const v=inp.value.replace(/,/g,'').trim();
       if(v){addKeyword(v);inp.value=''}
     }
@@ -755,8 +825,8 @@ function renderSortList() {
       <span class="sort-emoji">${item.icon}</span>
       <span class="sort-title ${isNew ? 'new-card' : ''}">${item.title}</span>
       ${isCurrent ? `<div class="sort-arrows">
-        <button onclick="moveSortItem(-1)" ${i === 0 ? 'disabled' : ''} title="Mover para cima"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 10V2M3 5l3-3 3 3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button onclick="moveSortItem(1)" ${i === _sortOrder.length - 1 ? 'disabled' : ''} title="Mover para baixo"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v8M3 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button onclick="moveSortItem(-1)" ${i === 0 ? 'disabled' : ''} title="Mover para cima" aria-label="Mover para cima"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 10V2M3 5l3-3 3 3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button onclick="moveSortItem(1)" ${i === _sortOrder.length - 1 ? 'disabled' : ''} title="Mover para baixo" aria-label="Mover para baixo"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v8M3 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>` : ''}
     </div>`;
   }).join('');
@@ -811,6 +881,7 @@ function onCategoryChange() {
 }
 
 function openModal(card){
+  _lastFocused=document.activeElement;
   buildTeams();const ed=!!card;
   document.getElementById('modal-title').textContent=ed?'Editar Card':'Novo Card';
   document.getElementById('edit-id').value=ed?card.id:'';
@@ -823,7 +894,7 @@ function openModal(card){
   document.getElementById('f-url').value=card?.url||'';
   // Build sort panel (replaces the old f-sort input)
   buildSortPanel(card?.category||'op', ed ? card.id : '');
-  document.getElementById('f-active').classList.toggle('on',card?.is_active!==false);
+  const _fa=document.getElementById('f-active');_fa.classList.toggle('on',card?.is_active!==false);_fa.setAttribute('aria-checked',_fa.classList.contains('on'));
   // Keywords
   _keywords=(card?.keywords||[]).slice();
   document.getElementById('kw-input').value='';
@@ -831,7 +902,7 @@ function openModal(card){
   document.getElementById('keywords-group').style.display=_hasKeywords?'':'none';
   // Quick access toggle
   const isQuick=card?.is_quick_access||false;
-  document.getElementById('f-quick').classList.toggle('on',isQuick);
+  const _fq=document.getElementById('f-quick');_fq.classList.toggle('on',isQuick);_fq.setAttribute('aria-checked',isQuick);
   document.getElementById('f-qa-order').value=card?.qa_order??0;
   document.getElementById('qa-order-group').style.display=(isQuick&&_hasQaOrder)?'block':'none';
   updateQuickHint(isQuick,ed?card.id:null);
@@ -844,7 +915,7 @@ function openModal(card){
 }
 function toggleCustomDesc(){const c=document.getElementById('f-desc-custom'),is=document.getElementById('f-desc').value==='_custom';c.style.display=is?'block':'none';if(is)c.focus();else c.value=''}
 function getDescVal(){const v=document.getElementById('f-desc').value;return v==='_custom'?document.getElementById('f-desc-custom').value.trim():v}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');if(_lastFocused&&typeof _lastFocused.focus==='function'){_lastFocused.focus();_lastFocused=null}}
 function editCard(id){const c=allCards.find(x=>x.id===id);if(c)openModal(c)}
 
 function toggleQuickAccess(el){
@@ -860,6 +931,7 @@ function toggleQuickAccess(el){
     }
   }
   el.classList.toggle('on');
+  el.setAttribute('aria-checked',el.classList.contains('on'));
   document.getElementById('qa-order-group').style.display=(el.classList.contains('on')&&_hasQaOrder)?'block':'none';
   updateQuickHint(el.classList.contains('on'),editId||null);
 }
@@ -913,7 +985,7 @@ async function saveCard(){
       if(dupe)markError('f-url','Esse link já existe no card "'+dupe.title+'"');
     }
   }
-  if(!teams.length){document.getElementById('f-teams').classList.add('field-error');errors.push('Selecione ao menos uma área')}
+  if(!teams.length){const te=document.getElementById('f-teams');te.classList.add('field-error');const tem=te.closest('.form-group')?.querySelector('.field-error-msg');if(tem){tem.textContent='Selecione ao menos uma área';tem.classList.add('visible')}errors.push('Selecione ao menos uma área')}
 
   if(errors.length){toast(errors[0]);return}
 
@@ -967,20 +1039,61 @@ async function saveCard(){
 }
 
 // DELETE
-function confirmDelete(id){_deleteId=id;const c=allCards.find(x=>x.id===id);document.getElementById('confirm-msg').textContent=`Excluir "${c?.title||'card'}"?`;document.getElementById('confirm-overlay').classList.add('open')}
-function closeConfirm(){_deleteId=null;document.getElementById('confirm-overlay').classList.remove('open')}
-document.getElementById('btn-confirm-del').addEventListener('click',async()=>{if(!_deleteId)return;try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${_deleteId}`,{method:'DELETE',headers:{...sbH(),'Prefer':'return=minimal'}});if(!r.ok)throw 0;toast('Card excluído');closeConfirm();await loadCards()}catch(e){console.error(e);toast('Erro ao excluir')}});
+function openConfirm(msg,action,label){
+  _confirmLastFocused=document.activeElement;
+  _confirmAction=action;
+  document.getElementById('confirm-msg').textContent=msg;
+  const delBtn=document.getElementById('btn-confirm-del');
+  delBtn.textContent=label||'Excluir';
+  document.getElementById('confirm-overlay').classList.add('open');
+  setTimeout(()=>delBtn.focus(),50);
+}
+function confirmDelete(id){
+  _deleteId=id;const c=allCards.find(x=>x.id===id);
+  openConfirm(`Excluir "${c?.title||'card'}"?`,async()=>{
+    if(!_deleteId)return;
+    try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${_deleteId}`,{method:'DELETE',headers:{...sbH(),'Prefer':'return=minimal'}});if(!r.ok)throw 0;toast('Card excluído');closeConfirm();await loadCards();document.querySelector('#panel-cards .btn-primary')?.focus()}catch(e){console.error(e);toast('Erro ao excluir')}
+  },'Excluir');
+}
+function closeConfirm(){_deleteId=null;_confirmAction=null;document.getElementById('confirm-overlay').classList.remove('open');if(_confirmLastFocused&&typeof _confirmLastFocused.focus==='function'){_confirmLastFocused.focus();_confirmLastFocused=null}}
+let _confirmRunning=false;
+document.getElementById('btn-confirm-del').addEventListener('click',async e=>{
+  if(typeof _confirmAction!=='function'||_confirmRunning)return;
+  _confirmRunning=true;const btn=e.currentTarget;btn.disabled=true;
+  try{await _confirmAction()}finally{_confirmRunning=false;btn.disabled=false}
+});
 
 // ADMINS
 async function loadAdmins(){try{const r=await fetch(`${SB_URL}/rest/v1/hub_admins?select=email,added_at&order=added_at.asc`,{headers:sbH(_accessToken)});if(!r.ok)throw 0;renderAdmins(await r.json())}catch(e){console.error(e)}}
-function renderAdmins(list){document.getElementById('admins-grid').innerHTML=list.map(a=>{const me=a.email===currentUserEmail;return`<div class="admin-chip"><span class="admin-email">${esc(a.email.replace('@hypr.mobi',''))}</span>${me?'<span class="admin-you">Você</span>':''}${!me?`<button class="btn-remove-admin" title="Remover" onclick="removeAdmin('${esc(a.email)}')"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/></svg></button>`:'<div style="width:6px"></div>'}</div>`}).join('')}
+function renderAdmins(list){document.getElementById('admins-grid').innerHTML=list.map(a=>{const me=a.email===currentUserEmail;return`<div class="admin-chip"><span class="admin-email">${esc(a.email.replace('@hypr.mobi',''))}</span>${me?'<span class="admin-you">Você</span>':''}${!me?`<button class="btn-remove-admin" title="Remover" aria-label="Remover acesso de ${esc(a.email)}" onclick="removeAdmin('${esc(a.email)}')"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/></svg></button>`:'<div style="width:6px"></div>'}</div>`}).join('')}
 async function addAdmin(){const inp=document.getElementById('admin-email-input');let em=inp.value.trim().toLowerCase();if(!em)return;if(!em.includes('@'))em+='@hypr.mobi';if(!em.endsWith('@hypr.mobi')){toast('Apenas emails @hypr.mobi');return}const btn=document.getElementById('btn-add-admin');btn.disabled=true;try{const r=await fetch(`${SB_URL}/rest/v1/hub_admins`,{method:'POST',headers:{...sbH(_accessToken),'Prefer':'return=minimal'},body:JSON.stringify({email:em})});if(r.status===409){toast('Email já é admin')}else if(!r.ok){throw 0}else{toast('Admin adicionado');inp.value=''}await loadAdmins()}catch(e){console.error(e);toast('Erro ao adicionar')}finally{btn.disabled=false}}
-async function removeAdmin(em){if(em===currentUserEmail)return;try{const r=await fetch(`${SB_URL}/rest/v1/hub_admins?email=eq.${encodeURIComponent(em)}`,{method:'DELETE',headers:{...sbH(_accessToken),'Prefer':'return=minimal'}});if(!r.ok)throw 0;toast('Admin removido');await loadAdmins()}catch(e){console.error(e);toast('Erro ao remover')}}
+function removeAdmin(em){
+  if(em===currentUserEmail)return;
+  openConfirm(`Remover acesso de admin de "${em}"?`,async()=>{
+    try{const r=await fetch(`${SB_URL}/rest/v1/hub_admins?email=eq.${encodeURIComponent(em)}`,{method:'DELETE',headers:{...sbH(_accessToken),'Prefer':'return=minimal'}});if(!r.ok)throw 0;toast('Admin removido');closeConfirm();await loadAdmins();document.getElementById('admin-email-input')?.focus()}catch(e){console.error(e);toast('Erro ao remover')}
+  },'Remover');
+}
 
 // EVENTS
 document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeConfirm()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllFilterDD();closeConfirm();closeModal()}});
 document.getElementById('admin-email-input').addEventListener('keydown',e=>{if(e.key==='Enter')addAdmin()});
+
+// Focus trap for open dialogs
+function _trapFocus(e,container){
+  const sel='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  const list=[...container.querySelectorAll(sel)].filter(el=>el.offsetParent!==null);
+  if(!list.length){e.preventDefault();return}
+  const first=list[0],last=list[list.length-1];
+  if(e.shiftKey){if(document.activeElement===first||!container.contains(document.activeElement)){e.preventDefault();last.focus()}}
+  else{if(document.activeElement===last||!container.contains(document.activeElement)){e.preventDefault();first.focus()}}
+}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const co=document.getElementById('confirm-overlay'),mo=document.getElementById('modal-overlay');
+  if(co.classList.contains('open'))_trapFocus(e,co);
+  else if(mo.classList.contains('open'))_trapFocus(e,mo);
+});
 
 // BOOT
 (async()=>{try{

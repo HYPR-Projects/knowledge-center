@@ -361,7 +361,7 @@ img { display: block; max-width: 100%; }
 .search-input {
   width: 100%;
   height: 36px;
-  padding: 0 var(--sp-5) 0 36px;
+  padding: 0 40px 0 36px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
@@ -379,6 +379,16 @@ img { display: block; max-width: 100%; }
   position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
   width: 16px; height: 16px; color: var(--muted); pointer-events: none;
 }
+.search-clear {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); transition: color .2s, background .2s;
+}
+.search-clear:hover { color: var(--text); background: var(--surf-h); }
+.search-clear svg { width: 12px; height: 12px; }
+.search-clear[hidden] { display: none; }
 
 /* ════════════════════════════════════════
    MAIN CONTENT
@@ -465,6 +475,19 @@ img { display: block; max-width: 100%; }
   padding: var(--sp-6) var(--sp-6) var(--sp-2);
   margin-bottom: var(--sp-8);
   animation: fadeUp .4s ease .08s both;
+  max-height: 2000px;
+  transition: max-height .35s ease, opacity .2s ease,
+              margin-bottom .3s ease, padding .3s ease;
+}
+/* Durante a busca a zona inteira some — sem painel vazio poluindo os resultados */
+.shortcuts-zone.search-hidden {
+  max-height: 0;
+  padding-top: 0; padding-bottom: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  border-width: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 /* Remove individual section bottom margin — zone padding handles it */
 .shortcuts-zone .fav-section { margin-bottom: var(--sp-5); }
@@ -1190,6 +1213,9 @@ img { display: block; max-width: 100%; }
 .cat-name {
   font-size: 19px; font-weight: 700; letter-spacing: -.02em; color: var(--text);
 }
+.cat-sub {
+  font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0;
+}
 .cat-count {
   font-size: 12px; color: var(--muted);
   background: var(--surface); border: 1px solid var(--border);
@@ -1274,6 +1300,21 @@ img { display: block; max-width: 100%; }
   text-transform: uppercase; background: transparent;
   border: 1px solid rgba(129,140,248,.35); color: rgba(129,140,248,.7);
 }
+
+/* Category tag — aparece nos cards durante a busca (lista flat de resultados) */
+.cat-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: .06em;
+  padding: 1px 6px; border-radius: 4px; line-height: 1.6;
+  text-transform: uppercase;
+}
+.cat-tag.op { background: rgba(99,179,237,.14);  color: #63b3ed; }
+.cat-tag.da { background: rgba(104,211,145,.14); color: #68d391; }
+.cat-tag.fe { background: rgba(154,117,237,.14); color: #a78bea; }
+.cat-tag.rc { background: rgba(246,173,85,.14);  color: #f6ad55; }
+[data-theme="light"] .cat-tag.op { color: #2b6cb0; }
+[data-theme="light"] .cat-tag.da { color: #2f855a; }
+[data-theme="light"] .cat-tag.fe { color: #6b46c1; }
+[data-theme="light"] .cat-tag.rc { color: #c05621; }
 
 /* Click counter */
 .card-clicks {
@@ -1645,6 +1686,11 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
             <path d="M15 15l-3-3" stroke-linecap="round"/>
           </svg>
           <input class="search-input" id="search" type="text" placeholder="Buscar link... (⌘K)" autocomplete="off" aria-label="Buscar links" />
+          <button type="button" class="search-clear" id="search-clear" aria-label="Limpar busca" hidden>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M5 5l10 10M15 5L5 15" stroke-linecap="round"/>
+            </svg>
+          </button>
         </div>
         <div class="sr-only" aria-live="polite" id="results-live"></div>
       </div>
@@ -1708,7 +1754,7 @@ mark { background: rgba(17,161,203,.28); color: inherit; border-radius: 2px; pad
     <main class="hub-main">
       <h1 class="sr-only">HYPR Knowledge Hub</h1>
       <!-- Shortcuts zone: elevated surface -->
-      <div class="shortcuts-zone">
+      <div class="shortcuts-zone" id="shortcuts-zone">
       <section class="fav-section no-data" id="fav-section">
         <button type="button" class="section-label" onclick="toggleSection('fav')" aria-expanded="true" aria-controls="collapse-fav">
           <span><span class="fav-star-lead" aria-hidden="true">★</span> Favoritos</span>
@@ -2282,7 +2328,8 @@ function toggleGroup(headerEl) {
   const isCollapsed = sec.classList.toggle('grp-collapsed');
   if (headerEl.setAttribute) headerEl.setAttribute('aria-expanded', !isCollapsed);
   const key = sec.dataset.grpKey;
-  if (key) localStorage.setItem('hypr-hub-grp-' + key, isCollapsed ? '1' : '');
+  // Durante uma busca a visão é transitória — não sobrescreve a preferência salva
+  if (key && !searchQuery) localStorage.setItem('hypr-hub-grp-' + key, isCollapsed ? '1' : '');
   updateToggleAllIcon();
 }
 
@@ -2296,7 +2343,7 @@ function toggleAllGroups() {
     const h = s.querySelector('.cat-header');
     if (h) h.setAttribute('aria-expanded', !shouldCollapse);
     const key = s.dataset.grpKey;
-    if (key) localStorage.setItem('hypr-hub-grp-' + key, shouldCollapse ? '1' : '');
+    if (key && !searchQuery) localStorage.setItem('hypr-hub-grp-' + key, shouldCollapse ? '1' : '');
   });
   updateToggleAllIcon();
 }
@@ -3049,7 +3096,14 @@ function renderSections() {
   // 3. Build groups based on active view mode
   let groups = []; // { id, label, icon, cls, links[] }
 
-  if (activeViewMode === 'category') {
+  if (q) {
+    // Modo resultados: busca ignora o agrupamento e mostra uma lista única
+    // ordenada por relevância, com badge de categoria em cada card.
+    if (allLinks.length) {
+      groups.push({ id: '_search', label: 'Resultados', sub: document.getElementById('search').value.trim(), icon: '🔎', cls: 'grp-other', links: allLinks });
+    }
+  }
+  else if (activeViewMode === 'category') {
     CATS.forEach(cat => {
       const links = allLinks.filter(l => l._cat.id === cat.id);
       if (links.length) groups.push({ id: cat.id, label: cat.label, icon: cat.icon, cls: cat.cls, links });
@@ -3085,12 +3139,16 @@ function renderSections() {
   }
 
   // 4. Render groups
+  // Busca/filtro ativo força grupos expandidos: o estado colapsado salvo é
+  // ignorado (não apagado) pra nenhum resultado ficar escondido atrás de
+  // um grupo minimizado. Ao limpar busca/filtros, a preferência volta.
+  const forceExpand = !!q || (activeCats.size + activeTypes.size + activeTeams.size + activeProducts.size) > 0;
   groups.forEach((grp, gi) => {
     total += grp.links.length;
     const sec = document.createElement('section');
     sec.className = 'cat-section';
     const grpKey = activeViewMode + '_' + grp.id;
-    if (localStorage.getItem('hypr-hub-grp-' + grpKey) === '1') sec.classList.add('grp-collapsed');
+    if (!forceExpand && localStorage.getItem('hypr-hub-grp-' + grpKey) === '1') sec.classList.add('grp-collapsed');
     sec.dataset.cat = grp.id;
     sec.dataset.grpKey = grpKey;
     sec.style.animationDelay = `${0.1 + gi * 0.06}s`;
@@ -3098,7 +3156,7 @@ function renderSections() {
     sec.innerHTML = `
       <button type="button" class="cat-header" onclick="toggleGroup(this)" aria-expanded="${grpExpanded}">
         <span class="cat-icon ${grp.cls}" aria-hidden="true">${grp.icon}</span>
-        <span class="cat-name">${grp.label}</span>
+        <span class="cat-name">${grp.label}${grp.sub ? ` <span class="cat-sub">para “${esc(grp.sub)}”</span>` : ''}</span>
         <span class="cat-count">${grp.links.length}</span>
         <span class="grp-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </button>
@@ -3107,13 +3165,18 @@ function renderSections() {
         ${grp.links.map(l => {
           const typeId = l._typeId;
           const catCls = l._cat ? l._cat.cls : 'op';
+          const tags = [
+            q && l._cat ? `<span class="cat-tag ${l._cat.cls}">${esc(l._cat.label)}</span>` : '',
+            ...(l.team || []).map(t => `<span class="team-tag t-${esc(t.toLowerCase())}">${esc(t)}</span>`),
+            ...(l.product || []).map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`)
+          ].join('');
           return `<div class="link-card" data-type="${typeId}" data-link-id="${l.id}">
             <a class="card-hit" href="${esc(l.url)}" target="_blank" rel="noopener" aria-label="${esc(l.title)}" title="${esc(l.title)}"></a>
             <div class="card-icon ${catCls}" aria-hidden="true">${esc(l.icon)}</div>
             <div class="card-body">
               <div class="card-title" title="${esc(l.title)}">${hl(l.title, q)}${l.isNew ? '<span class="new-badge">Novo</span>' : ''}</div>
               <div class="card-desc">${hl(l.desc, q)}</div>
-              ${l.team && l.team.length ? `<div class="card-teams">${l.team.map(t => `<span class="team-tag t-${esc(t.toLowerCase())}">${esc(t)}</span>`).join('')}${l.product && l.product.length ? l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('') : ''}</div>` : l.product && l.product.length ? `<div class="card-teams">${l.product.map(p => `<span class="product-tag p-${esc(p.toLowerCase())}">${esc(p)}</span>`).join('')}</div>` : ''}
+              ${tags ? `<div class="card-teams">${tags}</div>` : ''}
             </div>
             ${favStarBtn(l.id)}
             <svg class="card-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -3244,20 +3307,47 @@ function initSearch() {
   let t;
   el.addEventListener('input', e => {
     clearTimeout(t);
+    document.getElementById('search-clear').hidden = !e.target.value;
     t = setTimeout(() => {
       searchQuery = _normalize(e.target.value.trim());
-      // Animate fav/quick/trending: hide during search, show when cleared
-      document.getElementById('fav-section').classList.toggle('search-hidden', !!searchQuery);
-      document.getElementById('quick-section').classList.toggle('search-hidden', !!searchQuery);
-      document.getElementById('trending-section').classList.toggle('search-hidden', !!searchQuery);
+      syncShortcutsVisibility();
       renderSections();
     }, 120);
+  });
+  // Esc com o campo focado limpa a busca (antes de fechar qualquer painel)
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && el.value) {
+      e.preventDefault();
+      e.stopPropagation();
+      clearSearch();
+    }
+  });
+  document.getElementById('search-clear').addEventListener('click', () => clearSearch());
+}
+
+function clearSearch() {
+  const el = document.getElementById('search');
+  el.value = '';
+  searchQuery = '';
+  document.getElementById('search-clear').hidden = true;
+  syncShortcutsVisibility();
+  renderSections();
+  el.focus();
+}
+
+// Esconde a zona de atalhos (Favoritos / Acesso rápido / Mais acessados)
+// durante a busca — inclusive o painel container, pra não sobrar barra vazia.
+function syncShortcutsVisibility() {
+  const hidden = !!searchQuery;
+  ['shortcuts-zone', 'fav-section', 'quick-section', 'trending-section'].forEach(id => {
+    document.getElementById(id)?.classList.toggle('search-hidden', hidden);
   });
 }
 
 function clearAllFiltersAndSearch() {
   document.getElementById('search').value = '';
   searchQuery = '';
+  document.getElementById('search-clear').hidden = true;
   activeCats.clear(); activeTypes.clear(); activeTeams.clear(); activeProducts.clear();
   renderCatChips(); renderTypeChips(); renderTeamChips(); renderProductChips();
   updateCatBtn(); updateCatTags();
@@ -3265,9 +3355,7 @@ function clearAllFiltersAndSearch() {
   updateTeamBtn(); updateTeamTags();
   updateProductBtn(); updateProductTags();
   syncMobileFilters();
-  document.getElementById('fav-section').classList.remove('search-hidden');
-  document.getElementById('quick-section').classList.remove('search-hidden');
-  document.getElementById('trending-section').classList.remove('search-hidden');
+  syncShortcutsVisibility();
   renderSections();
 }
 

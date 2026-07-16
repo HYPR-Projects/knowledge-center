@@ -958,7 +958,9 @@ async function saveCard(){
   const title=document.getElementById('f-title').value.trim();
   const icon=document.getElementById('f-icon').value.trim();
   const desc=getDescVal();
-  const url=document.getElementById('f-url').value.trim();
+  let url=document.getElementById('f-url').value.trim();
+  // Auto-prepend https:// quando o usuário não informa o esquema (ex: "teste.com")
+  if(url&&!/^[a-z][a-z0-9+.-]*:\/\//i.test(url)){url='https://'+url;document.getElementById('f-url').value=url;}
   const teams=[...document.querySelectorAll('#f-teams input:checked')].map(c=>c.value);
   const product=[...document.querySelectorAll('#f-product input:checked')].map(c=>c.value);
 
@@ -1006,11 +1008,11 @@ async function saveCard(){
     // Save the main card
     if(ed){
       body.updated_at=new Date().toISOString();
-      const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${id}`,{method:'PATCH',headers:{...sbH(),'Prefer':'return=minimal'},body:JSON.stringify(body)});
-      if(!r.ok)throw 0;
+      const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${id}`,{method:'PATCH',headers:{...sbH(_accessToken),'Prefer':'return=minimal'},body:JSON.stringify(body)});
+      if(!r.ok)throw new Error('PATCH hub_links: '+r.status);
     } else {
-      const r=await fetch(`${SB_URL}/rest/v1/hub_links`,{method:'POST',headers:{...sbH(),'Prefer':'return=minimal'},body:JSON.stringify(body)});
-      if(!r.ok)throw 0;
+      const r=await fetch(`${SB_URL}/rest/v1/hub_links`,{method:'POST',headers:{...sbH(_accessToken),'Prefer':'return=minimal'},body:JSON.stringify(body)});
+      if(!r.ok)throw new Error('POST hub_links: '+r.status);
     }
 
     // Batch-update sort_order for sibling cards in the same category
@@ -1025,7 +1027,7 @@ async function saveCard(){
         if (existing && (existing.sort_order ?? 0) === newSortOrder) return null; // no change
         return fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${item.id}`, {
           method: 'PATCH',
-          headers: { ...sbH(), 'Prefer': 'return=minimal' },
+          headers: { ...sbH(_accessToken), 'Prefer': 'return=minimal' },
           body: JSON.stringify({ sort_order: newSortOrder })
         });
       })
@@ -1052,7 +1054,7 @@ function confirmDelete(id){
   _deleteId=id;const c=allCards.find(x=>x.id===id);
   openConfirm(`Excluir "${c?.title||'card'}"?`,async()=>{
     if(!_deleteId)return;
-    try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${_deleteId}`,{method:'DELETE',headers:{...sbH(),'Prefer':'return=minimal'}});if(!r.ok)throw 0;toast('Card excluído');closeConfirm();await loadCards();document.querySelector('#panel-cards .btn-primary')?.focus()}catch(e){console.error(e);toast('Erro ao excluir')}
+    try{const r=await fetch(`${SB_URL}/rest/v1/hub_links?id=eq.${_deleteId}`,{method:'DELETE',headers:{...sbH(_accessToken),'Prefer':'return=minimal'}});if(!r.ok)throw new Error('DELETE hub_links: '+r.status);toast('Card excluído');closeConfirm();await loadCards();document.querySelector('#panel-cards .btn-primary')?.focus()}catch(e){console.error(e);toast('Erro ao excluir')}
   },'Excluir');
 }
 function closeConfirm(){_deleteId=null;_confirmAction=null;document.getElementById('confirm-overlay').classList.remove('open');if(_confirmLastFocused&&typeof _confirmLastFocused.focus==='function'){_confirmLastFocused.focus();_confirmLastFocused=null}}
@@ -1110,7 +1112,7 @@ document.addEventListener('keydown',e=>{
   currentUserEmail=em;_accessToken=ss.access_token;
   const av=document.getElementById('user-avatar'),pic=ss.user?.user_metadata?.avatar_url;
   if(pic)av.innerHTML=`<img src="${pic}" alt="">`;else av.textContent=(em||'?')[0].toUpperCase();
-  fetch(SB_URL+'/rest/v1/page_views',{method:'POST',headers:{...sbH(),'Prefer':'return=minimal'},body:JSON.stringify({user_email:em,page:'/admin'})}).catch(()=>{});
+  fetch(SB_URL+'/rest/v1/page_views',{method:'POST',headers:{...sbH(_accessToken),'Prefer':'return=minimal'},body:JSON.stringify({user_email:em,page:'/admin'})}).catch(()=>{});
   hideLoading();await Promise.all([loadAnalytics(),loadCards(),loadAdmins()]);
 }catch(e){console.error('Boot:',e);location.href='index.html'}})();
 </script>

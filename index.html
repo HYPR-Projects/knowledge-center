@@ -2127,7 +2127,7 @@ async function showHub(session) {
   // Gravar pageview
   fetch(SB_URL + '/rest/v1/page_views', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON, 'Prefer': 'return=minimal' },
+    headers: { 'Content-Type': 'application/json', 'apikey': SB_ANON, 'Authorization': 'Bearer ' + (session.access_token || SB_ANON), 'Prefer': 'return=minimal' },
     body: JSON.stringify({ user_email: email, page: '/' })
   }).catch(() => {});
 

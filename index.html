@@ -2046,16 +2046,58 @@ function startRefreshTimer() {
   _refreshTimer = setInterval(refreshSession, 10 * 60 * 1000); // every 10 min
 }
 
+// ─── PKCE ──────────────────────────────────────────────────────────────
+// O Supabase deprecou o fluxo implicit (#access_token) em favor do PKCE.
+// Geramos o par verifier/challenge (RFC 7636) na mão, sem CDN, via Web Crypto.
+const PKCE_VERIFIER_KEY = 'sb-xqvsylwhthoslkyxvtex-auth-token-code-verifier';
+
+// base64url sem padding — formato exigido pelo PKCE.
+function base64UrlEncode(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let str = '';
+  for (let i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+// code_verifier: 32 bytes aleatórios → base64url (43 chars, dentro do 43–128 do RFC).
+function generateCodeVerifier() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return base64UrlEncode(bytes);
+}
+
+// code_challenge = base64url( SHA-256(code_verifier) )
+async function computeCodeChallenge(verifier) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+  return base64UrlEncode(digest);
+}
+
 async function signInWithGoogle() {
-  window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(REDIRECT)}&hd=${DOMAIN}`;
+  // Fluxo PKCE: gera verifier + challenge e guarda o verifier pra troca no callback.
+  // Se a Web Crypto falhar (contexto inseguro/navegador antigo), seguimos sem
+  // challenge — o Supabase devolve #access_token e o handleCallback usa o implicit.
+  let pkceParams = '';
+  try {
+    const verifier  = generateCodeVerifier();
+    const challenge = await computeCodeChallenge(verifier);
+    localStorage.setItem(PKCE_VERIFIER_KEY, verifier);
+    pkceParams = `&code_challenge=${encodeURIComponent(challenge)}&code_challenge_method=s256`;
+  } catch (_) {
+    try { localStorage.removeItem(PKCE_VERIFIER_KEY); } catch {}
+  }
+  window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(REDIRECT)}&hd=${DOMAIN}${pkceParams}`;
 }
 
 async function exchangeCodeForSession(code) {
+  // PKCE exige devolver o code_verifier salvo no signInWithGoogle. Sem ele o
+  // Supabase rejeita a troca (challenge mismatch) — era o que faltava aqui.
+  const verifier = localStorage.getItem(PKCE_VERIFIER_KEY);
   const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=pkce`, {
     method: 'POST',
     headers: sbHeaders(),
-    body: JSON.stringify({ auth_code: code, redirect_uri: REDIRECT })
+    body: JSON.stringify({ auth_code: code, code_verifier: verifier })
   });
+  try { localStorage.removeItem(PKCE_VERIFIER_KEY); } catch {} // single-use
   if (!res.ok) return null;
   return await res.json();
 }
@@ -2075,7 +2117,8 @@ async function handleCallback() {
     return null;
   }
 
-  // Implicit flow (Supabase default para OAuth)
+  // Fallback: fluxo implicit (#access_token). Só ocorre se o PKCE não pôde ser
+  // iniciado (Web Crypto indisponível) ou se o Supabase devolver token no hash.
   if (hash.get('access_token')) {
     const access_token = hash.get('access_token');
     // email e metadados já vêm dentro do JWT — NÃO bloquear o login numa chamada
@@ -2097,7 +2140,8 @@ async function handleCallback() {
     return session;
   }
 
-  // PKCE flow (fallback, caso o Supabase passe a devolver ?code=)
+  // Fluxo PKCE (padrão): o Supabase devolve ?code= e trocamos pelo access_token
+  // enviando o code_verifier salvo no signInWithGoogle.
   if (params.get('code')) {
     const session = await exchangeCodeForSession(params.get('code'));
     if (session?.access_token) {

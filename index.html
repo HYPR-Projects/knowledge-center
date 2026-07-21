@@ -1966,6 +1966,26 @@ function sbHeaders() {
   return { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON, 'Content-Type': 'application/json' };
 }
 
+// Decodifica o payload de um JWT (base64url → JSON). O access_token do Supabase
+// já traz email e user_metadata — não precisamos de uma chamada de rede pra isso.
+function decodeJwt(token) {
+  try {
+    const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json = decodeURIComponent(
+      atob(b64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+    );
+    return JSON.parse(json);
+  } catch { return null; }
+}
+
+// fetch com timeout — impede que um request pendurado (rede/extensão lenta) trave
+// o boot no spinner pra sempre. Ao estourar, o fetch rejeita e o fluxo segue.
+function fetchWithTimeout(url, opts = {}, ms = 8000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(t));
+}
+
 // Lê sessão do localStorage (Supabase salva com essa chave)
 function getStoredSession() {
   try {
@@ -2004,7 +2024,7 @@ async function refreshSession() {
     // Refresh if token expired OR expires within 15 minutes
     const now = Math.floor(Date.now() / 1000);
     if (session.expires_at && (session.expires_at - now) > 900) return true; // still valid
-    const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=refresh_token`, {
+    const res = await fetchWithTimeout(`${SB_URL}/auth/v1/token?grant_type=refresh_token`, {
       method: 'POST',
       headers: sbHeaders(),
       body: JSON.stringify({ refresh_token: session.refresh_token })
@@ -2045,31 +2065,46 @@ async function handleCallback() {
   const params = new URLSearchParams(window.location.search);
   const hash   = new URLSearchParams(window.location.hash.slice(1));
 
+  // Erro devolvido pelo provedor/Supabase (ex.: acesso negado). Mostra no login
+  // em vez de silenciosamente voltar pro botão — o que parece um "loop".
+  const rawErr = hash.get('error_description') || params.get('error_description')
+              || hash.get('error') || params.get('error');
+  if (rawErr) {
+    history.replaceState(null, '', window.location.pathname);
+    showError(decodeURIComponent(rawErr.replace(/\+/g, ' ')));
+    return null;
+  }
+
   // Implicit flow (Supabase default para OAuth)
   if (hash.get('access_token')) {
+    const access_token = hash.get('access_token');
+    // email e metadados já vêm dentro do JWT — NÃO bloquear o login numa chamada
+    // /user: se ela travar (rede/extensão lenta), o usuário fica preso no spinner.
+    const claims = decodeJwt(access_token) || {};
     const session = {
-      access_token:  hash.get('access_token'),
+      access_token,
       refresh_token: hash.get('refresh_token'),
       expires_at:    Math.floor(Date.now() / 1000) + parseInt(hash.get('expires_in') || '3600'),
       token_type:    hash.get('token_type'),
+      user: {
+        id: claims.sub,
+        email: claims.email || '',
+        user_metadata: claims.user_metadata || {},
+      },
     };
-    // Pega dados do usuário
-    const userRes = await fetch(`${SB_URL}/auth/v1/user`, {
-      headers: { ...sbHeaders(), 'Authorization': 'Bearer ' + session.access_token }
-    });
-    if (userRes.ok) {
-      session.user = await userRes.json();
-    }
     saveSession(session);
-    // Limpa hash da URL
-    history.replaceState(null, '', window.location.pathname);
+    history.replaceState(null, '', window.location.pathname); // limpa o hash da URL
     return session;
   }
 
-  // PKCE flow
+  // PKCE flow (fallback, caso o Supabase passe a devolver ?code=)
   if (params.get('code')) {
     const session = await exchangeCodeForSession(params.get('code'));
     if (session?.access_token) {
+      if (!session.user) {
+        const claims = decodeJwt(session.access_token) || {};
+        session.user = { id: claims.sub, email: claims.email || '', user_metadata: claims.user_metadata || {} };
+      }
       saveSession(session);
       history.replaceState(null, '', window.location.pathname);
       return session;
@@ -2152,7 +2187,13 @@ async function showHub(session) {
     }
   }).catch(() => {});
 
-  await renderHub();
+  // Falha ao renderizar NÃO pode derrubar o usuário autenticado de volta pro login
+  // (senão vira loop: sessão válida → erro → login → sessão válida → ...).
+  try {
+    await renderHub();
+  } catch (err) {
+    console.error('Falha ao renderizar o hub:', err);
+  }
   startRefreshTimer();
 }
 
@@ -3446,10 +3487,16 @@ window.addEventListener('resize', () => updateViewSlider(true));
 })();
 
 (async () => {
+  // Rede de segurança: se o boot travar (rede/extensão lenta), nunca deixar o
+  // usuário preso no spinner — cai no login depois de 12s.
+  const bootSafety = setTimeout(() => {
+    const ls = document.getElementById('loading-screen');
+    if (ls && ls.style.display !== 'none') { hideLoading(); showLogin(); }
+  }, 12000);
   try {
     // 1. Tenta pegar sessão do callback OAuth (hash ou code)
     const cbSession = await handleCallback();
-    if (cbSession) { hideLoading(); await showHub(cbSession); return; }
+    if (cbSession) { clearTimeout(bootSafety); hideLoading(); await showHub(cbSession); return; }
 
     // 2. Tenta sessão salva no localStorage
     const stored = getStoredSession();
@@ -3458,22 +3505,22 @@ window.addEventListener('resize', () => updateViewSlider(true));
       const now = Math.floor(Date.now() / 1000);
       if (stored.expires_at && stored.expires_at < now) {
         const refreshed = await refreshSession();
-        if (refreshed) {
-          const fresh = getStoredSession();
-          hideLoading(); await showHub(fresh); return;
-        }
-        // Refresh falhou — refresh token expirado, precisa logar de novo
-        clearSession();
+        clearTimeout(bootSafety);
+        if (refreshed) { hideLoading(); await showHub(getStoredSession()); return; }
+        // Refresh falhou — token inválido/expirado, precisa logar de novo
         hideLoading(); showLogin(); return;
       }
+      clearTimeout(bootSafety);
       hideLoading(); await showHub(stored); return;
     }
 
     // 3. Sem sessão: mostra login
+    clearTimeout(bootSafety);
     hideLoading();
     showLogin();
   } catch (err) {
     console.error(err);
+    clearTimeout(bootSafety);
     hideLoading();
     showLogin();
   }
